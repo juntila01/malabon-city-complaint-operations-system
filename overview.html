@@ -1,0 +1,867 @@
+<main class="w-full space-y-6 bg-slate-100 p-6">
+
+    <!-- ============================================================
+         TOP SUMMARY
+    ============================================================= -->
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+        <!-- ========================================================
+             TOTAL COMPLAINTS
+        ========================================================= -->
+
+        <div id="totalComplaintsCard" class="group relative bg-white border border-gray-200
+                    rounded-2xl shadow-sm
+                    hover:shadow-lg hover:border-blue-200
+                    transition-all duration-300
+                    cursor-pointer overflow-visible">
+
+            <!-- NORMAL CARD -->
+            <div class="p-6">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-sm font-medium text-gray-500">
+                            Total Complaints
+                        </p>
+
+                        <h2 id="metric-total" class="mt-2 text-4xl font-bold tracking-tight text-gray-900">
+                            --
+                        </h2>
+
+                        <p class="mt-2 text-sm text-gray-500">
+                            All complaints received
+                        </p>
+
+                    </div>
+
+
+                    <div class="w-11 h-11 rounded-xl bg-blue-50
+                                flex items-center justify-center">
+
+                        <i class="fa-solid fa-file-lines text-blue-600"></i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CARD ACTION -->
+                <div class="mt-5 flex items-center justify-between">
+
+                    <span class="text-xs text-gray-400">
+                        Overall complaint volume
+                    </span>
+
+                    <button type="button" id="totalComplaintsMainButton" class="text-sm font-semibold text-blue-600
+                                   hover:text-blue-700 transition">
+
+                        View Complaints
+
+                        <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 EXPANDED TOTAL COMPLAINTS CONTENT
+
+                 This is NOT an absolute overlay anymore.
+                 The card naturally grows when hovered.
+            ==================================================== -->
+
+            <div id="totalComplaintsBreakdown" class="grid grid-rows-[0fr]
+                        opacity-0
+                        transition-all duration-300
+                        group-hover:grid-rows-[1fr]
+                        group-hover:opacity-100">
+
+                <div class="overflow-hidden min-h-0">
+
+                    <div class="px-6 pb-6">
+
+                        <!-- DIVIDER -->
+                        <div class="border-t border-gray-100 pt-5">
+
+                            <!-- HEADER -->
+                            <div class="flex items-center justify-between mb-4">
+
+                                <div>
+
+                                    <p class="text-xs font-semibold uppercase
+                                              tracking-wider text-gray-400">
+
+                                        Complaint Summary
+
+                                    </p>
+
+                                    <p class="text-sm font-semibold text-gray-800 mt-1">
+
+                                        Top complaint categories
+
+                                    </p>
+
+                                </div>
+
+
+                                <span class="px-2.5 py-1 rounded-full
+                                             bg-blue-50 text-blue-600
+                                             text-xs font-semibold">
+
+                                    Top 5
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- TOP 5 CATEGORY BREAKDOWN -->
+                            <div>
+
+                                <div class="flex items-center justify-between mb-3">
+
+                                    <p class="text-xs font-semibold uppercase
+                                              tracking-wider text-gray-400">
+
+                                        Categories
+
+                                    </p>
+
+                                    <span class="text-xs text-gray-400">
+
+                                        By complaint volume
+
+                                    </span>
+
+                                </div>
+
+
+                                <div id="totalHoverCategories" class="space-y-2">
+
+                                    <div class="py-6 text-center
+                                                text-sm text-gray-400">
+
+                                        Loading categories...
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FOOTER -->
+                            <div class="mt-5 pt-4 border-t border-gray-100
+                                        flex items-center justify-between">
+
+                                <span class="text-xs text-gray-400">
+
+                                    Top 5 complaint categories
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ========================================================
+             PENDING COMPLAINTS
+        ========================================================= -->
+
+        <div id="pendingComplaintsCard" class="group relative bg-white border border-gray-200
+                    rounded-2xl shadow-sm
+                    hover:shadow-lg hover:border-yellow-200
+                    transition-all duration-200
+                    cursor-pointer overflow-hidden">
+
+            <!-- NORMAL CARD -->
+            <div class="p-6">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-sm font-medium text-gray-500">
+                            Pending Complaints
+                        </p>
+
+                        <h2 id="metric-pending" class="mt-2 text-4xl font-bold tracking-tight text-yellow-600">
+                            --
+                        </h2>
+
+                        <p class="mt-2 text-sm text-gray-500">
+                            Awaiting action or dispatch
+                        </p>
+
+                    </div>
+
+
+                    <div class="w-11 h-11 rounded-xl bg-yellow-50
+                                flex items-center justify-center">
+
+                        <i class="fa-solid fa-clock text-yellow-600"></i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CARD ACTION -->
+                <div class="mt-5 flex items-center justify-between">
+
+                    <span class="text-xs text-gray-400">
+                        Oldest pending complaints first
+                    </span>
+
+                    <button type="button" id="pendingComplaintsMainButton" class="text-sm font-semibold text-yellow-600
+               hover:text-yellow-700 transition">
+
+                        View Pending
+
+                        <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+     EXPANDED PENDING COMPLAINTS CONTENT
+     
+     Card naturally grows when hovered.
+==================================================== -->
+
+            <div id="pendingComplaintsBreakdown" class="grid grid-rows-[0fr]
+            opacity-0
+            transition-all duration-300
+            group-hover:grid-rows-[1fr]
+            group-hover:opacity-100">
+
+                <div class="overflow-hidden min-h-0">
+
+                    <div class="px-6 pb-6">
+
+                        <!-- DIVIDER -->
+                        <div class="border-t border-gray-100 pt-5">
+
+                            <!-- HEADER -->
+                            <div class="flex items-center justify-between mb-4">
+
+                                <div>
+
+                                    <p class="text-xs font-semibold uppercase
+                                  tracking-wider text-gray-400">
+
+                                        Pending Queue
+
+                                    </p>
+
+                                    <p class="text-sm font-semibold text-gray-800 mt-1">
+
+                                        Complaints awaiting action
+
+                                    </p>
+
+                                </div>
+
+
+                                <span id="pendingHoverCount" class="px-2.5 py-1 rounded-full
+                                 bg-yellow-50 text-yellow-700
+                                 text-xs font-semibold">
+
+                                    0
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- PENDING COMPLAINTS TABLE -->
+                            <div class="border border-gray-100
+                            rounded-xl overflow-hidden">
+
+                                <div class="overflow-x-auto">
+
+                                    <table class="w-full text-sm">
+
+                                        <thead class="bg-gray-50
+                                          border-b border-gray-100">
+
+                                            <tr>
+
+                                                <th class="px-4 py-3 text-left
+                                               text-xs font-semibold
+                                               uppercase tracking-wide
+                                               text-gray-400">
+
+                                                    Complaint
+
+                                                </th>
+
+                                                <th class="px-4 py-3 text-left
+                                               text-xs font-semibold
+                                               uppercase tracking-wide
+                                               text-gray-400">
+
+                                                    Category
+
+                                                </th>
+
+                                                <th class="px-4 py-3 text-left
+                                               text-xs font-semibold
+                                               uppercase tracking-wide
+                                               text-gray-400">
+
+                                                    Date
+
+                                                </th>
+
+                                                <th class="px-4 py-3 text-right
+                                               text-xs font-semibold
+                                               uppercase tracking-wide
+                                               text-gray-400">
+
+                                                    Status
+
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody id="pendingComplaintsList" class="divide-y divide-gray-100">
+
+                                            <tr>
+
+                                                <td colspan="4" class="px-4 py-8
+                                               text-center
+                                               text-sm
+                                               text-gray-400">
+
+                                                    Loading pending complaints...
+
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FOOTER -->
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+
+                                <p class="text-xs text-gray-400 text-center">
+
+                                    Complaints requiring review or action
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ============================================================
+         ANALYTICS
+    ============================================================= -->
+
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+
+        <!-- ========================================================
+             COMPLAINT TREND
+        ========================================================= -->
+
+        <div class="xl:col-span-2 bg-white border border-gray-200
+                    rounded-2xl shadow-sm overflow-hidden">
+
+            <div class="px-6 py-5 border-b border-gray-100">
+
+                <div class="flex flex-col lg:flex-row
+                            lg:items-center lg:justify-between gap-5">
+
+                    <div>
+
+                        <div class="flex items-center gap-2">
+
+                            <h3 class="font-semibold text-gray-900">
+                                Complaint Trend
+                            </h3>
+
+                            <span class="px-2 py-0.5 rounded-full
+                                         bg-blue-50 text-blue-600
+                                         text-[10px] font-semibold uppercase">
+
+                                Analytics
+
+                            </span>
+
+                        </div>
+
+                        <p class="mt-1 text-sm text-gray-500">
+                            Monitor complaint volume across a selected period.
+                        </p>
+
+                    </div>
+
+
+                    <div class="flex flex-wrap items-center gap-2">
+
+                        <select id="trendPreset" class="border border-gray-300
+                                       rounded-lg px-3 py-2 text-sm
+                                       bg-white text-gray-700
+                                       focus:outline-none
+                                       focus:ring-2 focus:ring-blue-500">
+
+                            <option value="7">
+                                Last 7 Days
+                            </option>
+
+                            <option value="30" selected>
+                                Last 30 Days
+                            </option>
+
+                            <option value="90">
+                                Last 3 Months
+                            </option>
+
+                            <option value="365">
+                                Last 12 Months
+                            </option>
+
+                            <option value="custom">
+                                Custom Range
+                            </option>
+
+                        </select>
+
+
+                        <div class="flex items-center gap-2">
+
+                            <label for="trendFrom" class="text-xs font-medium text-gray-500">
+
+                                From
+
+                            </label>
+
+                            <input type="date" id="trendFrom" class="border border-gray-300
+                                          rounded-lg px-3 py-2 text-sm
+                                          text-gray-700
+                                          focus:outline-none
+                                          focus:ring-2
+                                          focus:ring-blue-500">
+
+                        </div>
+
+
+                        <div class="flex items-center gap-2">
+
+                            <label for="trendTo" class="text-xs font-medium text-gray-500">
+
+                                To
+
+                            </label>
+
+                            <input type="date" id="trendTo" class="border border-gray-300
+                                          rounded-lg px-3 py-2 text-sm
+                                          text-gray-700
+                                          focus:outline-none
+                                          focus:ring-2
+                                          focus:ring-blue-500">
+
+                        </div>
+
+
+                        <button id="applyTrendFilter" type="button" class="px-4 py-2 rounded-lg
+                                       bg-blue-600 text-white text-sm
+                                       font-medium
+                                       hover:bg-blue-700
+                                       active:bg-blue-800
+                                       transition">
+
+                            Apply
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="p-6">
+
+                <div class="relative h-[350px] w-full">
+
+                    <canvas id="complaintTrendChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="px-6 py-4 border-t border-gray-100
+                        flex flex-col sm:flex-row
+                        sm:items-center sm:justify-between gap-2">
+
+                <div class="flex items-center gap-2
+                            text-xs text-gray-500">
+
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+
+                    <span id="trendDateLabel">
+                        Showing the selected date range
+                    </span>
+
+                </div>
+
+
+                <span id="trendTotalLabel" class="text-xs font-medium text-gray-600">
+
+                    0 complaints
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ========================================================
+             CATEGORY DISTRIBUTION
+        ========================================================= -->
+
+        <div class="bg-white border border-gray-200
+                    rounded-2xl shadow-sm overflow-hidden">
+
+            <div class="px-6 py-5 border-b border-gray-100">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <h3 class="font-semibold text-gray-900">
+                            Complaint Categories
+                        </h3>
+
+                        <p class="mt-1 text-sm text-gray-500">
+                            Overall complaint distribution.
+                        </p>
+
+                    </div>
+
+
+                    <div class="w-9 h-9 rounded-lg bg-gray-50
+                                flex items-center justify-center">
+
+                        <i class="fa-solid fa-chart-pie text-gray-500"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="p-6">
+
+                <div class="relative h-[270px]
+                            flex items-center justify-center">
+
+                    <canvas id="categoryChart"></canvas>
+
+
+                    <div id="categoryChartCenter" class="absolute inset-0
+                                flex flex-col items-center
+                                justify-center
+                                pointer-events-none">
+
+                        <span class="text-xs font-medium
+                                     uppercase tracking-wider
+                                     text-gray-400">
+
+                            Total
+
+                        </span>
+
+
+                        <span id="categoryTotal" class="mt-1 text-3xl font-bold
+                                     text-gray-900">
+
+                            --
+
+                        </span>
+
+
+                        <span class="mt-1 text-xs text-gray-400">
+                            Complaints
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div id="categoryLegend" class="mt-5 space-y-3">
+
+                    <div class="flex items-center
+                                justify-between">
+
+                        <div class="flex items-center gap-2">
+
+                            <span class="w-2.5 h-2.5
+                                         rounded-full bg-gray-300">
+                            </span>
+
+                            <span class="text-sm text-gray-500">
+                                Loading...
+                            </span>
+
+                        </div>
+
+
+                        <span class="text-xs font-medium
+                                     text-gray-400">
+
+                            --
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================================================================
+     CHART.JS
+================================================================ -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<!-- ================================================================
+     DASHBOARD UI HELPERS
+================================================================ -->
+
+<script>
+
+    window.dashboardCategoryColors = {
+
+        "Fire": "#ef4444",
+
+        "Medical": "#ec4899",
+
+        "Crime": "#8b5cf6",
+
+        "Traffic": "#f59e0b",
+
+        "Flood": "#06b6d4",
+
+        "Garbage": "#22c55e",
+
+        "Noise": "#6366f1",
+
+        "Infrastructure": "#f97316",
+
+        "Other": "#64748b"
+
+    };
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const preset = document.getElementById("trendPreset");
+
+        const from = document.getElementById("trendFrom");
+
+        const to = document.getElementById("trendTo");
+
+
+        if (!preset || !from || !to) {
+            return;
+        }
+
+
+        function formatDate(date) {
+
+            const year = date.getFullYear();
+
+            const month = String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+            const day = String(
+                date.getDate()
+            ).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+
+        }
+
+
+        function applyPreset(days) {
+
+            const end = new Date();
+
+            const start = new Date();
+
+            start.setDate(
+                start.getDate() - (days - 1)
+            );
+
+
+            from.value = formatDate(start);
+
+            to.value = formatDate(end);
+
+        }
+
+
+        preset.addEventListener("change", function () {
+
+            const value = this.value;
+
+
+            if (value === "custom") {
+
+                from.focus();
+
+                return;
+
+            }
+
+
+            applyPreset(
+                parseInt(value, 10)
+            );
+
+        });
+
+
+        applyPreset(30);
+
+
+        /* ============================================================
+           COMPLAINT PAGE NAVIGATION
+        ============================================================ */
+
+        loadPage(
+            "/Complaint/Complaints/complaint.html"
+        );
+
+
+        const totalButtons = [
+
+            document.getElementById(
+                "totalComplaintsMainButton"
+            ),
+
+            document.getElementById(
+                "totalComplaintsViewLink"
+            )
+
+        ];
+
+
+        totalButtons.forEach(function (button) {
+
+            if (!button) {
+                return;
+            }
+
+
+            button.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                window.location.href = COMPLAINT_PAGE;
+
+            });
+
+        });
+
+
+        const pendingButtons = [
+
+            document.getElementById(
+                "pendingComplaintsMainButton"
+            ),
+
+            document.getElementById(
+                "pendingComplaintsViewLink"
+            )
+
+        ];
+
+
+        pendingButtons.forEach(function (button) {
+
+            if (!button) {
+                return;
+            }
+
+
+            button.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                window.location.href = COMPLAINT_PAGE;
+
+            });
+
+        });
+
+    });
+
+</script>

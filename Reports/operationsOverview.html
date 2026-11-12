@@ -1,0 +1,398 @@
+
+<div id="operationsReportPage"
+     class="w-full space-y-6 bg-slate-50 p-4 md:p-6">
+
+    <!-- PAGE HEADER -->
+    <section class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+                    <i class="fa-solid fa-chart-line"></i>
+                </span>
+
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">
+                        Complaint Analytics
+                    </h1>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        Analyze incident patterns and support operational planning across Malabon City.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <button
+                id="operationsExportCSV"
+                type="button"
+                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                <i class="fa-solid fa-file-csv mr-2"></i>
+                Export CSV
+            </button>
+
+            <button
+                id="operationsPrintReport"
+                type="button"
+                class="inline-flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <i class="fa-solid fa-file-pdf mr-2"></i>
+                Print / Save PDF
+            </button>
+        </div>
+    </section>
+
+    <!-- REPORT FILTERS -->
+    <section
+        id="operationsFiltersSection"
+        class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="font-bold text-slate-900">Report Filters</h2>
+                <p class="mt-1 text-xs text-slate-500">
+                    Choose a reporting period and narrow the results.
+                </p>
+            </div>
+
+            <button
+                id="operationsResetFilters"
+                type="button"
+                class="text-sm font-semibold text-blue-700 hover:underline">
+                Reset filters
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+            <div>
+                <label for="operationsStartDate"
+                       class="mb-1.5 block text-xs font-semibold text-slate-600">
+                    Start date
+                </label>
+                <input
+                    id="operationsStartDate"
+                    type="date"
+                    class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+            </div>
+
+            <div>
+                <label for="operationsEndDate"
+                       class="mb-1.5 block text-xs font-semibold text-slate-600">
+                    End date
+                </label>
+                <input
+                    id="operationsEndDate"
+                    type="date"
+                    class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+            </div>
+
+            <div>
+                <label for="operationsLocationFilter"
+                       class="mb-1.5 block text-xs font-semibold text-slate-600">
+                    Barangay / Location
+                </label>
+                <select
+                    id="operationsLocationFilter"
+                    class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    <option value="">All locations</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="operationsCategoryFilter"
+                       class="mb-1.5 block text-xs font-semibold text-slate-600">
+                    Incident category
+                </label>
+                <select
+                    id="operationsCategoryFilter"
+                    class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    <option value="">All categories</option>
+                    <option value="Fire">Fire</option>
+                    <option value="Flood">Flood</option>
+                    <option value="Obstruction">Obstruction</option>
+                    <option value="Traffic">Traffic</option>
+                    <option value="Uncategorized">Uncategorized</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="operationsUrgencyFilter"
+                       class="mb-1.5 block text-xs font-semibold text-slate-600">
+                    Urgency level
+                </label>
+                <select
+                    id="operationsUrgencyFilter"
+                    class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    <option value="">All urgency levels</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="NORMAL">NORMAL</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="operationsStatusFilter"
+                       class="mb-1.5 block text-xs font-semibold text-slate-600">
+                    Complaint status
+                </label>
+                <select
+                    id="operationsStatusFilter"
+                    class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    <option value="">All statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Verified">Verified</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Unable to Resolve">Unable to Resolve</option>
+                </select>
+            </div>
+
+            <div class="flex items-end sm:col-span-2 xl:col-span-2">
+                <button
+                    id="operationsGenerateReport"
+                    type="button"
+                    class="inline-flex w-full items-center justify-center rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                    <i class="fa-solid fa-filter mr-2"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+
+        <p id="operationsReportPeriod"
+           class="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+            Select a reporting period to begin.
+        </p>
+    </section>
+
+    <!-- STATUS MESSAGE -->
+    <div
+        id="operationsReportMessage"
+        role="status"
+        aria-live="polite"
+        class="hidden rounded-xl border p-4 text-sm">
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Total complaints</p>
+                    <p id="operationsTotal"
+                       class="mt-3 text-3xl font-bold tracking-tight text-slate-900">—</p>
+                </div>
+                <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                    <i class="fa-solid fa-clipboard-list text-lg"></i>
+                </span>
+            </div>
+            <p class="mt-3 text-xs text-slate-400">Matching the selected filters</p>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">High urgency</p>
+                    <p id="operationsHighUrgency"
+                       class="mt-3 text-3xl font-bold tracking-tight text-red-600">—</p>
+                </div>
+                <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-50 text-red-600">
+                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                </span>
+            </div>
+            <p class="mt-3 text-xs text-slate-400">Reports classified as HIGH</p>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Resolved</p>
+                    <p id="operationsResolved"
+                       class="mt-3 text-3xl font-bold tracking-tight text-emerald-700">—</p>
+                </div>
+                <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                    <i class="fa-solid fa-circle-check text-lg"></i>
+                </span>
+            </div>
+            <p class="mt-3 text-xs text-slate-400">Complaints marked resolved</p>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Still active</p>
+                    <p id="operationsActive"
+                       class="mt-3 text-3xl font-bold tracking-tight text-amber-600">—</p>
+                </div>
+                <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+                    <i class="fa-solid fa-clock text-lg"></i>
+                </span>
+            </div>
+            <p class="mt-3 text-xs text-slate-400">Not resolved or rejected</p>
+        </article>
+    </section>
+
+    <!-- CHARTS -->
+    <section class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+
+        <article class="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div>
+                <h2 class="font-bold text-slate-900">Monthly Complaint Trend</h2>
+                <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Monthly complaint totals for the selected reporting period.
+                </p>
+            </div>
+            <div class="relative mt-5 h-64 sm:h-72">
+                <canvas id="operationsMonthlyChart"
+                        aria-label="Monthly complaint trend chart"
+                        role="img"></canvas>
+            </div>
+        </article>
+
+        <article class="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div>
+                <h2 class="font-bold text-slate-900">Reports by Category</h2>
+                <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Compare reported Fire, Flood, Obstruction, and Traffic incidents.
+                </p>
+            </div>
+            <div class="relative mt-5 h-64 sm:h-72">
+                <canvas id="operationsCategoryChart"
+                        aria-label="Complaint categories chart"
+                        role="img"></canvas>
+            </div>
+        </article>
+
+        <article class="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div>
+                <h2 class="font-bold text-slate-900">Urgency Distribution</h2>
+                <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Compare HIGH and NORMAL urgency reports.
+                </p>
+            </div>
+            <div class="relative mt-5 h-60 sm:h-64">
+                <canvas id="operationsUrgencyChart"
+                        aria-label="Complaint urgency distribution chart"
+                        role="img"></canvas>
+            </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div>
+                <h2 class="font-bold text-slate-900">Complaint Status</h2>
+                <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Distribution of complaint statuses in the selected period.
+                </p>
+            </div>
+            <div id="operationsStatusBreakdown" class="mt-6 space-y-5">
+                <p class="text-sm text-slate-400">No data loaded.</p>
+            </div>
+        </article>
+    </section>
+
+    <!-- HISTORICAL PATTERNS -->
+    <section class="rounded-2xl border border-blue-100 bg-white p-5 shadow-sm md:p-6">
+        <div class="flex items-start gap-3">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+            </span>
+            <div>
+                <h2 class="font-bold text-slate-900">
+                    Historical Patterns and Planning Insights
+                </h2>
+                <p class="mt-1 text-sm leading-6 text-slate-500">
+                    Reviews previous complaint records to identify recurring monthly patterns that may inform operational preparation.
+                </p>
+            </div>
+        </div>
+
+        <div id="operationsPredictionContainer" class="mt-5 space-y-3">
+            <p class="text-sm text-slate-400">
+                Insights will appear after the report loads.
+            </p>
+        </div>
+
+        <p class="mt-5 border-t border-slate-100 pt-4 text-xs leading-5 text-slate-500">
+            These insights describe historical reporting patterns. They are not guaranteed forecasts, and actual incidents may differ from previous records.
+        </p>
+    </section>
+
+    <!-- LOCATION COMPARISON -->
+    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 p-5">
+            <h2 class="font-bold text-slate-900">Barangay / Location Comparison</h2>
+            <p class="mt-1 text-xs leading-5 text-slate-500">
+                Compare report volume, the most common incident category, high-urgency reports, and active complaints by saved location.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                    <tr>
+                        <th scope="col" class="whitespace-nowrap px-5 py-3">Location</th>
+                        <th scope="col" class="whitespace-nowrap px-5 py-3">Total</th>
+                        <th scope="col" class="whitespace-nowrap px-5 py-3">Most common category</th>
+                        <th scope="col" class="whitespace-nowrap px-5 py-3">HIGH urgency</th>
+                        <th scope="col" class="whitespace-nowrap px-5 py-3">Active</th>
+                    </tr>
+                </thead>
+                <tbody id="operationsLocationBody" class="divide-y divide-slate-100">
+                    <tr>
+                        <td colspan="5" class="px-5 py-8 text-center text-slate-400">
+                            No data loaded.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Screen-only pagination -->
+        <div id="operationsLocationPagination"
+             class="border-t border-slate-100 px-5 py-4"></div>
+    </section>
+
+    <!-- DETAILED COMPLAINT RECORDS -->
+    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 p-5">
+            <h2 class="font-bold text-slate-900">
+                Complaint Records Included in This Report
+            </h2>
+            <p id="operationsRecordCount" class="mt-1 text-xs text-slate-500">
+                No records loaded.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                    <tr>
+                        <th scope="col" class="whitespace-nowrap px-4 py-3">Reference</th>
+                        <th scope="col" class="whitespace-nowrap px-4 py-3">Date submitted</th>
+                        <th scope="col" class="whitespace-nowrap px-4 py-3">Location</th>
+                        <th scope="col" class="whitespace-nowrap px-4 py-3">Category</th>
+                        <th scope="col" class="whitespace-nowrap px-4 py-3">Urgency</th>
+                        <th scope="col" class="whitespace-nowrap px-4 py-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="operationsRecordsBody" class="divide-y divide-slate-100">
+                    <tr>
+                        <td colspan="6" class="px-4 py-8 text-center text-slate-400">
+                            No data loaded.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Screen-only pagination -->
+        <div id="operationsRecordsPagination"
+             class="border-t border-slate-100 px-4 py-4"></div>
+    </section>
+
+    <!-- FOOTER NOTE -->
+    <footer class="pb-2 text-center text-xs leading-5 text-slate-400">
+        MCAT Complaint Analytics · Figures are based on complaint records returned by the selected filters.
+    </footer>
+
+</div>

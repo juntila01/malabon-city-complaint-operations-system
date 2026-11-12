@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Citizen Management</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        /* =========================================
+           SCROLLBAR
+           ========================================= */
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+
+        /* =========================================
+           PAGINATION
+           ========================================= */
+
+        .citizen-page-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0 8px;
+
+            border-radius: 8px;
+
+            border: 1px solid #e5e7eb;
+
+            background: #ffffff;
+
+            color: #4b5563;
+
+            font-size: 12px;
+            font-weight: 500;
+
+            transition:
+                background-color 0.15s ease,
+                border-color 0.15s ease,
+                color 0.15s ease,
+                opacity 0.15s ease;
+        }
+
+
+        .citizen-page-btn:hover:not(:disabled) {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #111827;
+        }
+
+
+        .citizen-page-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+
+        .citizen-page-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+
+        .citizen-page-ellipsis {
+            min-width: 24px;
+            height: 32px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #9ca3af;
+
+            font-size: 12px;
+        }
+    </style>
+
+</head>
+
+
+<body class="bg-slate-100">
+
+
+    <div class="w-full px-2 py-2">
+
+        <!-- =========================================
+             FILTERS
+             ========================================= -->
+
+        <div class="mb-4 rounded-xl border border-gray-200 bg-white shadow-sm">
+
+            <div class="p-4">
+
+                <!-- FILTER HEADER -->
+
+                <div class="mb-4 flex items-center gap-3">
+
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                        <i class="fa-solid fa-filter text-sm"></i>
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-sm font-semibold text-gray-900">
+                            Filters
+                        </h2>
+
+                        <p class="text-xs text-gray-500">
+                            Search and filter registered citizens.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FILTER CONTROLS -->
+
+                <div class="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_12rem_auto]">
+
+                    <!-- SEARCH -->
+                    <div class="relative min-w-0">
+
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                            <i class="fa-solid fa-magnifying-glass text-sm text-gray-400"></i>
+                        </div>
+
+                        <input id="searchCitizen" type="text" autocomplete="off"
+                            placeholder="Search ID, name, email..."
+                            class="h-10 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <select id="statusFilter"
+                        class="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+                        <option value="All">
+                            All Citizens
+                        </option>
+
+                        <option value="Unverified">
+                            Unverified
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="Verified">
+                            Verified
+                        </option>
+
+                        <option value="Rejected">
+                            Rejected
+                        </option>
+
+                    </select>
+
+
+                    <!-- CLEAR -->
+
+                    <button id="clearCitizenFilters" type="button"
+                        class="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200">
+
+                        <i class="fa-solid fa-rotate-left text-xs"></i>
+
+                        Clear
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================================
+             CITIZEN TABLE CARD
+             ========================================= -->
+
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+
+            <!-- =====================================
+                 TABLE HEADER
+                 ===================================== -->
+
+            <div
+                class="flex flex-col gap-3 border-b border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+
+                        <i class="fa-solid fa-users text-sm"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-sm font-semibold text-gray-900">
+                            Citizens
+                        </h2>
+
+                        <p class="text-xs text-gray-500">
+                            Review and manage registered citizens.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="citizenPagination" class="flex items-center justify-end gap-1"></div>
+
+            </div>
+
+
+            <!-- =====================================
+                 TABLE
+                 ===================================== -->
+
+            <div class="max-h-[70vh] overflow-x-auto overflow-y-auto">
+
+                <table class="w-full min-w-[850px] border-collapse">
+
+
+                    <!-- TABLE HEAD -->
+
+                    <thead class="border-b border-gray-200 bg-gray-50">
+
+                        <tr class="text-xs uppercase tracking-wider text-gray-500">
+
+                            <th class="px-5 py-3.5 text-left font-semibold">
+                                ID
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left font-semibold">
+                                Name
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left font-semibold">
+                                Email
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left font-semibold">
+                                Contact
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left font-semibold">
+                                Status
+                            </th>
+
+                            <th class="px-5 py-3.5 text-center font-semibold">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- TABLE BODY -->
+
+                    <tbody id="citizensTable" class="divide-y divide-gray-100 bg-white">
+
+                        <tr>
+
+                            <td colspan="6" class="px-5 py-16 text-center text-sm text-gray-400">
+
+                                Loading citizens...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         VIEW CITIZEN MODAL
+         ========================================= -->
+
+    <div id="viewModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-950/50 px-5 backdrop-blur-[3px]">
+
+        <div
+            class="flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
+
+
+            <!-- HEADER -->
+
+            <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+
+                <div>
+
+                    <h2 class="text-lg font-semibold text-gray-900">
+                        Citizen Information
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-500">
+                        Registered citizen details
+                    </p>
+
+                </div>
+
+
+                <button id="closeModal" type="button"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gray-700">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="space-y-6 overflow-y-auto p-6">
+
+
+                <!-- VERIFICATION IMAGE -->
+
+                <div>
+
+                    <label class="text-xs font-medium uppercase tracking-wider text-slate-400">
+                        Verification Image
+                    </label>
+
+
+                    <div class="group relative mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+
+                        <img id="modalImage" src="" class="h-72 w-full cursor-pointer object-contain">
+
+
+                        <button id="expandImageBtn" type="button"
+                            class="absolute bottom-3 right-3 rounded-lg bg-black/70 px-3 py-2 text-sm text-white opacity-0 transition group-hover:opacity-100">
+
+                            <i class="fa-solid fa-expand mr-1"></i>
+
+                            View Full
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CITIZEN DETAILS -->
+
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+
+                    <!-- NAME -->
+
+                    <div class="rounded-lg border border-gray-100 bg-slate-50 p-3">
+
+                        <p class="text-xs uppercase tracking-wide text-slate-400">
+                            Full Name
+                        </p>
+
+                        <p id="modalName" class="mt-2 font-semibold text-gray-900">
+                        </p>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="rounded-lg border border-gray-100 bg-slate-50 p-3">
+
+                        <p class="text-xs uppercase tracking-wide text-slate-400">
+                            Status
+                        </p>
+
+                        <p id="modalStatus" class="mt-2 font-semibold text-gray-900">
+                        </p>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="rounded-lg border border-gray-100 bg-slate-50 p-3 sm:col-span-2">
+
+                        <p class="text-xs uppercase tracking-wide text-slate-400">
+                            Email
+                        </p>
+
+                        <p id="modalEmail" class="mt-2 break-all text-gray-700">
+                        </p>
+
+                    </div>
+
+
+                    <!-- CONTACT -->
+
+                    <div class="rounded-lg border border-gray-100 bg-slate-50 p-3 sm:col-span-2">
+
+                        <p class="text-xs uppercase tracking-wide text-slate-400">
+                            Contact Number
+                        </p>
+
+                        <p id="modalContact" class="mt-2 text-gray-700">
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="flex justify-end gap-3 border-t border-gray-100 bg-gray-50 p-5">
+
+
+                <button id="rejectBtn" type="button"
+                    class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-200">
+
+                    Reject
+
+                </button>
+
+
+                <button id="verifyBtn" type="button"
+                    class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700">
+
+                    Verify
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         FULL IMAGE VIEWER
+         ========================================= -->
+
+    <div id="imageViewer"
+        class="fixed inset-0 z-[999] hidden flex items-center justify-center bg-black/90">
+
+
+        <button id="closeImageViewer" type="button"
+            class="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20">
+
+            <i class="fa-solid fa-xmark text-xl"></i>
+
+        </button>
+
+
+        <img id="fullImage" class="max-h-[95vh] max-w-[95vw] object-contain">
+
+    </div>
+
+
+    <!-- =========================================
+         ACTION / NOTIFICATION MODAL
+         ========================================= -->
+
+    <div id="actionModal"
+        class="fixed inset-0 z-[1000] hidden flex items-center justify-center bg-slate-950/50 px-5 backdrop-blur-[3px]">
+
+
+        <div id="actionModalBox"
+            class="w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
+
+
+            <!-- ICON -->
+
+            <div class="flex justify-center pt-7">
+
+                <div id="actionModalIcon" class="flex h-14 w-14 items-center justify-center rounded-full">
+
+                    <i id="actionModalIconSymbol" class="fa-solid text-xl"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTENT -->
+
+            <div class="px-7 pb-6 pt-5 text-center">
+
+                <h2 id="actionModalTitle" class="text-lg font-bold text-gray-900">
+
+                    Confirmation
+
+                </h2>
+
+
+                <p id="actionModalMessage" class="mt-2 text-sm leading-relaxed text-gray-500">
+
+                    Are you sure?
+
+                </p>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div id="actionModalButtons" class="flex justify-center gap-4 px-7 pb-7">
+
+
+                <button id="actionModalCancel" type="button"
+                    class="hidden min-w-[130px] rounded-xl border border-gray-200 bg-gray-100 px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-200">
+
+                    Cancel
+
+                </button>
+
+
+                <button id="actionModalConfirm" type="button"
+                    class="min-w-[150px] rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700">
+
+                    Confirm
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Management</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        /* ============================================================
+           COMPLAINT TABLE
+        ============================================================ */
+
+        .complaint-col-id {
+            width: 70px;
+        }
+
+        .complaint-col-complaint {
+            width: 40%;
+            min-width: 240px;
+        }
+
+        .complaint-col-location {
+            width: 25%;
+            min-width: 180px;
+        }
+
+        .complaint-col-priority {
+            width: 120px;
+        }
+
+        .complaint-col-status {
+            width: 150px;
+        }
+
+        .complaint-col-actions {
+            width: 120px;
+        }
+
+        /* ============================================================
+           TABLE SCROLLBAR
+        ============================================================ */
+
+        .overflow-x-auto {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 7px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* ============================================================
+           TABLE ROW
+        ============================================================ */
+
+        #complaintsTable tr {
+            transition: background-color 0.15s ease;
+        }
+
+        #complaintsTable tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* ============================================================
+           MOBILE
+        ============================================================ */
+
+        @media (max-width: 640px) {
+            .complaint-col-id {
+                width: 55px;
+            }
+
+            .complaint-col-complaint {
+                min-width: 210px;
+            }
+
+            .complaint-col-location {
+                min-width: 160px;
+            }
+
+            .complaint-col-priority {
+                width: 105px;
+            }
+
+            .complaint-col-status {
+                width: 130px;
+            }
+
+            .complaint-col-actions {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100">
+
+    <div class="w-full px-2">
+
+        <!-- ============================================================
+             FILTERS
+        ============================================================ -->
+
+        <div class="px-3 sm:px-4 lg:px-5 py-4">
+
+            <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
+
+                <div class="flex flex-col xl:flex-row gap-3">
+
+                    <!-- SEARCH -->
+
+                    <div class="relative flex-1 min-w-0">
+
+                        <i
+                            class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+
+                        <input id="complaintSearch" type="text" placeholder="Search complaint or location..."
+                            class="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 transition">
+
+                    </div>
+
+                    <!-- FILTERS -->
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 xl:flex gap-2">
+
+                        <select id="complaintStatusFilter"
+                            class="w-full xl:w-32 px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Verified">Verified</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+
+                        <select id="complaintUrgencyFilter"
+                            class="w-full xl:w-32 px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
+                            <option value="">All Priority</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="NORMAL">NORMAL</option>
+                        </select>
+
+                        <select id="complaintCategoryFilter"
+                            class="w-full xl:w-36 px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
+                            <option value="">All Categories</option>
+                            <option value="Fire">Fire</option>
+                            <option value="Flood">Flood</option>
+                            <option value="Obstruction">Obstruction</option>
+                            <option value="Traffic">Traffic</option>
+                        </select>
+
+                        <select id="complaintAssignmentFilter"
+                            class="w-full xl:w-36 px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
+                            <option value="">All Assignments</option>
+                            <option value="assigned">Assigned</option>
+                            <option value="unassigned">Unassigned</option>
+                        </select>
+
+                    </div>
+
+                    <!-- CLEAR FILTERS -->
+
+                    <button id="clearComplaintFilters" type="button"
+                        class="shrink-0 px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition whitespace-nowrap">
+                        <i class="fa-solid fa-filter-circle-xmark mr-1"></i>
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+             EMERGENCY INCIDENT BANNER
+        ============================================================ -->
+
+        <div id="emergencyComplaintBanner"
+            class="hidden mx-3 sm:mx-4 lg:mx-5 mb-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 shadow-sm">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+                <div class="flex items-start gap-3">
+
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-600">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-bold text-red-800">
+                            Emergency Incident View
+                        </p>
+
+                        <p id="emergencyComplaintBannerText" class="mt-0.5 text-xs text-red-600">
+                            Showing complaints related to the detected emergency.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap">
+
+                    <button id="verifyEmergencyClusterBtn" type="button"
+                        class="shrink-0 rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white hover:bg-green-700 transition">
+                        <i class="fa-solid fa-check-double mr-1"></i>
+                        Verify All
+                    </button>
+
+                    <button id="dispatchEmergencyClusterBtn" type="button" disabled
+                        class="shrink-0 rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-truck-fast mr-1"></i>
+                        Dispatch Emergency
+                    </button>
+
+                    <button id="exitEmergencyComplaintView" type="button"
+                        class="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-100 transition">
+                        <i class="fa-solid fa-xmark mr-1"></i>
+                        Exit
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+             COMPLAINT TABLE CONTAINER
+        ============================================================ -->
+
+        <div class="mx-3 sm:mx-4 lg:mx-5 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+
+            <!-- TABLE HEADER -->
+
+            <div class="px-4 sm:px-5 py-3 border-b border-gray-200 bg-white">
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+
+                    <div class="flex items-center gap-2">
+
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                            <i class="fa-solid fa-list-check text-xs"></i>
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-semibold text-gray-700">
+                                Complaints
+                            </p>
+
+                            <p id="complaintPageInfo" class="text-[11px] text-gray-400">
+                                Showing 0 of 0
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div id="complaintPagination"
+                        class="flex items-center justify-start md:justify-end gap-1 flex-wrap"></div>
+
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="w-full overflow-x-auto">
+
+                <table class="w-full min-w-[760px] border-collapse text-sm">
+
+                    <thead>
+                        <tr
+                            class="bg-gray-50 border-b border-gray-200 text-[10px] sm:text-[11px] uppercase tracking-wider text-gray-500">
+
+                            <th class="px-4 py-3.5 text-left font-semibold complaint-col-id whitespace-nowrap">
+                                No.
+                            </th>
+
+                            <th class="px-4 py-3.5 text-left font-semibold complaint-col-complaint">
+                                Complaint
+                            </th>
+
+                            <th class="px-4 py-3.5 text-left font-semibold complaint-col-location">
+                                Location
+                            </th>
+
+                            <th class="px-4 py-3.5 text-left font-semibold complaint-col-priority whitespace-nowrap">
+                                Priority
+                            </th>
+
+                            <th class="px-4 py-3.5 text-left font-semibold complaint-col-status whitespace-nowrap">
+                                Status
+                            </th>
+
+                            <th class="px-4 py-3.5 text-center font-semibold complaint-col-actions whitespace-nowrap">
+                                Action
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <!-- complaint.js populates this table. -->
+
+                    <tbody id="complaintsTable" class="divide-y divide-gray-100 bg-white"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+             COMPLAINT VIEW MODAL
+        ============================================================ -->
+
+        <div id="viewModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm">
+
+            <div class="flex min-h-full items-center justify-center p-4 sm:p-6">
+
+                <div
+                    class="relative flex w-full max-w-6xl max-h-[92vh] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+
+                    <!-- MODAL HEADER -->
+
+                    <div class="flex shrink-0 items-start justify-between border-b border-gray-200 px-6 py-5">
+
+                        <div>
+
+                            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+
+                                <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                                    Complaint
+                                </span>
+
+                                <span id="modalReference"
+                                    class="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700">
+                                    —
+                                </span>
+
+                                <span id="modalComplaintID" class="text-xs font-medium text-gray-400"></span>
+
+                            </div>
+
+                            <div class="mt-1 flex items-center gap-3">
+
+                                <h2 id="modalCategory" class="text-xl font-bold text-gray-900">
+                                    Complaint
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                        <button id="closeModal" type="button"
+                            class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
+
+                    </div>
+
+                    <!-- MODAL CONTENT -->
+
+                    <div class="flex-1 overflow-y-auto">
+
+                        <div class="grid grid-cols-1 xl:grid-cols-3">
+
+                            <!-- LEFT / MAIN CONTENT -->
+
+                            <div class="xl:col-span-2 border-b xl:border-b-0 xl:border-r border-gray-200">
+
+                                <div class="p-6 space-y-7">
+
+                                    <!-- =================================================
+                                         AI ANALYSIS UNAVAILABLE NOTICE
+                                    ================================================== -->
+
+                                    <div id="aiManualReviewNotice"
+                                        class="hidden rounded-xl border border-amber-300 bg-amber-50 p-4">
+
+                                        <div class="flex items-start gap-3">
+
+                                            <div
+                                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                            </div>
+
+                                            <div>
+                                                <p class="text-sm font-bold text-amber-900">
+                                                    AI Analysis Unavailable — Manual Review Required
+                                                </p>
+
+                                                <p class="mt-1 text-xs leading-5 text-amber-800">
+                                                    The AI service could not analyze this complaint.
+                                                    Review the citizen's description and evidence manually,
+                                                    determine its category and urgency, and set the appropriate
+                                                    response deadline before verifying or dispatching it.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- =================================================
+                                         MANUAL AI REVIEW FORM
+                                         ADDED: CATEGORY, URGENCY, SAVE BUTTON
+                                    ================================================== -->
+
+                                    <div id="aiManualReviewForm"
+                                        class="hidden rounded-xl border border-blue-200 bg-blue-50 p-4">
+
+                                        <div class="mb-4">
+
+                                            <h3 class="text-sm font-bold text-blue-900">
+                                                Manual Complaint Classification
+                                            </h3>
+
+                                            <p class="mt-1 text-xs leading-5 text-blue-800">
+                                                AI analysis was unavailable. Review the complaint details
+                                                and evidence, then select the appropriate category and urgency.
+                                            </p>
+
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                                            <!-- CATEGORY -->
+
+                                            <div>
+
+                                                <label for="manualReviewCategory"
+                                                    class="mb-1.5 block text-xs font-semibold text-gray-700">
+                                                    Complaint Category
+                                                </label>
+
+                                                <select id="manualReviewCategory"
+                                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                                                    <option value="">Select category</option>
+                                                    <option value="FIRE">Fire</option>
+                                                    <option value="FLOOD">Flood</option>
+                                                    <option value="OBSTRUCTION">Obstruction</option>
+                                                    <option value="TRAFFIC">Traffic</option>
+                                                </select>
+
+                                            </div>
+
+                                            <!-- URGENCY -->
+
+                                            <div>
+
+                                                <label for="manualReviewUrgency"
+                                                    class="mb-1.5 block text-xs font-semibold text-gray-700">
+                                                    Urgency
+                                                </label>
+
+                                                <select id="manualReviewUrgency"
+                                                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                                                    <option value="">Select urgency</option>
+                                                    <option value="HIGH">HIGH — Urgent response</option>
+                                                    <option value="NORMAL">NORMAL — Standard response</option>
+                                                </select>
+
+                                            </div>
+
+                                        </div>
+
+                                        <p class="mt-3 text-xs leading-5 text-gray-600">
+                                            HIGH must be selected only when the complaint describes an
+                                            immediate threat to life or public safety. Choose the category
+                                            and urgency based on the available information.
+                                        </p>
+
+                                        <button id="saveManualReviewBtn" type="button"
+                                            class="mt-4 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+                                            <i class="fa-solid fa-clipboard-check mr-1"></i>
+                                            Save Manual Review
+                                        </button>
+
+                                        <p id="manualReviewMessage" class="mt-3 hidden text-xs font-medium"
+                                            role="status" aria-live="polite"></p>
+
+                                    </div>
+
+                                    <!-- STATUS SUMMARY -->
+
+                                    <section>
+
+                                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+                                            <!-- URGENCY -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+                                                <p
+                                                    class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                    Urgency
+                                                </p>
+
+                                                <p id="modalUrgency" class="mt-1 text-sm font-bold text-gray-900">
+                                                    —
+                                                </p>
+
+                                            </div>
+
+                                            <!-- STATUS -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+                                                <p
+                                                    class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                    Status
+                                                </p>
+
+                                                <p id="modalStatus" class="mt-1 text-sm font-bold text-gray-900">
+                                                    —
+                                                </p>
+
+                                            </div>
+
+                                            <!-- SLA -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+                                                <p
+                                                    class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                    SLA
+                                                </p>
+
+                                                <p id="modalSLABox" class="mt-1 text-sm font-bold text-gray-900">
+                                                    —
+                                                </p>
+
+                                            </div>
+
+                                            <!-- TIME REMAINING -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+                                                <p
+                                                    class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                    Time Remaining
+                                                </p>
+
+                                                <p id="modalRemaining" class="mt-1 text-sm font-bold text-gray-900">
+                                                    —
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- COMPLAINT DESCRIPTION -->
+
+                                    <section>
+
+                                        <div class="mb-3">
+
+                                            <h3 class="text-sm font-bold text-gray-900">
+                                                Complaint Details
+                                            </h3>
+
+                                            <p class="text-xs text-gray-400 mt-0.5">
+                                                Report submitted by the citizen
+                                            </p>
+
+                                        </div>
+
+                                        <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+
+                                            <p id="modalComplaint"
+                                                class="text-sm leading-7 text-gray-700 whitespace-pre-wrap">
+                                                —
+                                            </p>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- LOCATION -->
+
+                                    <section>
+
+                                        <div class="mb-3 flex items-start justify-between">
+
+                                            <div>
+                                                <h3 class="text-sm font-bold text-gray-900">
+                                                    Complaint Location
+                                                </h3>
+
+                                                <p class="text-xs text-gray-400 mt-0.5">
+                                                    Location recorded when the complaint was submitted
+                                                </p>
+                                            </div>
+
+                                            <span id="modalGPSStatus"
+                                                class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
+                                                Checking GPS
+                                            </span>
+
+                                        </div>
+
+                                        <div class="space-y-3">
+
+                                            <!-- LOCATION -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+                                                <div class="flex items-start gap-3">
+
+                                                    <div
+                                                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                                                        <i class="fa-solid fa-location-dot"></i>
+                                                    </div>
+
+                                                    <div class="min-w-0">
+
+                                                        <p
+                                                            class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                            Location
+                                                        </p>
+
+                                                        <p id="modalLocation"
+                                                            class="mt-1 text-sm font-semibold text-gray-800">
+                                                            Locating complaint...
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <!-- LANDMARK -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+                                                <div class="flex items-start gap-3">
+
+                                                    <div
+                                                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-500">
+                                                        <i class="fa-solid fa-landmark"></i>
+                                                    </div>
+
+                                                    <div class="min-w-0">
+
+                                                        <p
+                                                            class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                            Nearby Landmark
+                                                        </p>
+
+                                                        <p id="modalLandmark"
+                                                            class="mt-1 text-sm font-semibold text-gray-800">
+                                                            Finding nearby landmark...
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- MAP -->
+
+                                        <div
+                                            class="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
+                                            <div id="complaintMap" class="w-full h-[320px]"></div>
+                                        </div>
+
+                                    </section>
+
+                                    <!-- EVIDENCE -->
+
+                                    <section>
+
+                                        <div class="mb-3">
+
+                                            <h3 class="text-sm font-bold text-gray-900">
+                                                Evidence
+                                            </h3>
+
+                                            <p class="text-xs text-gray-400 mt-0.5">
+                                                Image submitted with the complaint
+                                            </p>
+
+                                        </div>
+
+                                        <!-- AI MATCH -->
+
+                                        <div class="mb-3 rounded-xl border border-gray-200 bg-white p-4">
+
+                                            <div class="flex items-center justify-between">
+
+                                                <div>
+
+                                                    <p
+                                                        class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                        Image &amp; Complaint Match
+                                                    </p>
+
+                                                    <p class="text-xs text-gray-400 mt-1">
+                                                        AI comparison between the submitted image and complaint
+                                                        description
+                                                    </p>
+
+                                                </div>
+
+                                                <span id="modalAIImageMatch"
+                                                    class="text-sm font-semibold text-gray-500">
+                                                    UNKNOWN
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- EVIDENCE CONTAINER -->
+
+                                        <div id="evidenceContainer"
+                                            class="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-100 min-h-[260px] flex items-center justify-center">
+
+                                            <img id="modalImage" src="" alt="Complaint evidence"
+                                                class="hidden w-full max-h-[600px] object-contain cursor-zoom-in">
+
+                                            <video id="modalVideo" controls playsinline
+                                                class="hidden w-full max-h-[600px] object-contain bg-black">
+                                                Your browser does not support video playback.
+                                            </video>
+
+                                            <div id="noEvidence" class="hidden text-center text-gray-400 py-16">
+
+                                                <i class="fa-regular fa-image text-3xl mb-2"></i>
+
+                                                <p class="text-sm">
+                                                    No evidence available
+                                                </p>
+
+                                            </div>
+
+                                            <button id="expandImageBtn" type="button"
+                                                class="absolute bottom-3 right-3 hidden rounded-lg bg-black/70 px-3 py-2 text-xs font-medium text-white hover:bg-black/80">
+
+                                                <i class="fa-solid fa-expand mr-1"></i>
+                                                View Full Image
+
+                                            </button>
+
+                                        </div>
+
+                                    </section>
+
+                                </div>
+
+                            </div>
+
+                            <!-- RIGHT / INFORMATION PANEL -->
+
+                            <aside class="bg-gray-50/60">
+
+                                <div class="p-6 space-y-6">
+
+                                    <!-- COMPLAINT PROGRESS -->
+
+                                    <section>
+
+                                        <div class="mb-4">
+
+                                            <h3 class="text-sm font-bold text-gray-900">
+                                                Complaint Progress
+                                            </h3>
+
+                                            <p class="text-xs text-gray-400 mt-0.5">
+                                                Current status of the complaint response
+                                            </p>
+
+                                        </div>
+
+                                        <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+                                            <div id="complaintProgress" class="space-y-0">
+
+                                                <!-- SUBMITTED -->
+
+                                                <div class="progress-step flex gap-3" data-step="submitted">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                        <div class="progress-line w-px flex-1 bg-gray-200 my-1"></div>
+
+                                                    </div>
+
+                                                    <div class="pb-4">
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Submitted
+                                                        </p>
+
+                                                        <p id="progressSubmittedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- UNDER REVIEW -->
+
+                                                <div class="progress-step flex gap-3" data-step="review">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                        <div class="progress-line w-px flex-1 bg-gray-200 my-1"></div>
+
+                                                    </div>
+
+                                                    <div class="pb-4">
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Under Review
+                                                        </p>
+
+                                                        <p id="progressReviewDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- REJECTED -->
+
+                                                <div class="progress-step hidden flex gap-3" data-step="rejected">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-xmark text-xs"></i>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div>
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Rejected
+                                                        </p>
+
+                                                        <p id="progressRejectedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- VERIFIED -->
+
+                                                <div class="progress-step flex gap-3" data-step="verified">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                        <div class="progress-line w-px flex-1 bg-gray-200 my-1"></div>
+
+                                                    </div>
+
+                                                    <div class="pb-4">
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Verified
+                                                        </p>
+
+                                                        <p id="progressVerifiedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- ASSIGNED -->
+
+                                                <div class="progress-step flex gap-3" data-step="assigned">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                        <div class="progress-line w-px flex-1 bg-gray-200 my-1"></div>
+
+                                                    </div>
+
+                                                    <div class="pb-4">
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Assigned
+                                                        </p>
+
+                                                        <p id="progressAssignedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- DISPATCHED -->
+
+                                                <div class="progress-step flex gap-3" data-step="dispatched">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                        <div class="progress-line w-px flex-1 bg-gray-200 my-1"></div>
+
+                                                    </div>
+
+                                                    <div class="pb-4">
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Dispatched
+                                                        </p>
+
+                                                        <p id="progressDispatchedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- ARRIVED -->
+
+                                                <div class="progress-step flex gap-3" data-step="arrived">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                        <div class="progress-line w-px flex-1 bg-gray-200 my-1"></div>
+
+                                                    </div>
+
+                                                    <div class="pb-4">
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Arrived
+                                                        </p>
+
+                                                        <p id="progressArrivedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- RESOLVED -->
+
+                                                <div class="progress-step flex gap-3" data-step="resolved">
+
+                                                    <div class="flex flex-col items-center">
+
+                                                        <div
+                                                            class="progress-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                                            <i class="fa-solid fa-check text-xs"></i>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div>
+
+                                                        <p class="progress-title text-xs font-semibold text-gray-400">
+                                                            Resolved
+                                                        </p>
+
+                                                        <p id="progressResolvedDate"
+                                                            class="mt-0.5 text-[11px] text-gray-400">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- RESPONSE TIMELINE -->
+
+                                    <section>
+
+                                        <h3 class="text-sm font-bold text-gray-900">
+                                            Response Timeline
+                                        </h3>
+
+                                        <p class="text-xs text-gray-400 mt-0.5 mb-5">
+                                            Track the complaint's response period
+                                        </p>
+
+                                        <div class="space-y-5">
+
+                                            <!-- CREATED -->
+
+                                            <div class="flex gap-3">
+
+                                                <div class="flex flex-col items-center">
+
+                                                    <div
+                                                        class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                                                        <i class="fa-solid fa-file-circle-plus text-xs"></i>
+                                                    </div>
+
+                                                    <div class="w-px flex-1 bg-gray-200 mt-2"></div>
+
+                                                </div>
+
+                                                <div class="pb-3">
+
+                                                    <p class="text-xs font-semibold text-gray-900">
+                                                        Complaint Created
+                                                    </p>
+
+                                                    <p id="modalCreated" class="mt-1 text-xs text-gray-500">
+                                                        —
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                            <!-- DEADLINE -->
+
+                                            <div class="flex gap-3">
+
+                                                <div class="flex flex-col items-center">
+
+                                                    <div
+                                                        class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                                                        <i class="fa-regular fa-clock text-xs"></i>
+                                                    </div>
+
+                                                    <div class="w-px flex-1 bg-gray-200 mt-2"></div>
+
+                                                </div>
+
+                                                <div class="pb-3">
+
+                                                    <p class="text-xs font-semibold text-gray-900">
+                                                        Response Deadline
+                                                    </p>
+
+                                                    <p id="modalDeadline" class="mt-1 text-xs text-gray-500">
+                                                        —
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                            <!-- CURRENT SLA -->
+
+                                            <div class="flex gap-3">
+
+                                                <div>
+                                                    <div
+                                                        class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+                                                        <i class="fa-solid fa-chart-line text-xs"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+
+                                                    <p class="text-xs font-semibold text-gray-900">
+                                                        Current SLA Status
+                                                    </p>
+
+                                                    <p id="modalSLA" class="mt-1 text-xs font-semibold text-green-600">
+                                                        —
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                    <!-- ASSIGNMENT -->
+
+                                    <section class="border-t border-gray-200 pt-6">
+
+                                        <h3 class="text-sm font-bold text-gray-900">
+                                            Assignment
+                                        </h3>
+
+                                        <p class="text-xs text-gray-400 mt-0.5 mb-4">
+                                            People responsible for this complaint
+                                        </p>
+
+                                        <div class="space-y-3">
+
+                                            <!-- CITIZEN -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+                                                <div class="flex items-center gap-3">
+
+                                                    <div
+                                                        class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+                                                        <i class="fa-solid fa-user text-xs"></i>
+                                                    </div>
+
+                                                    <div class="min-w-0">
+
+                                                        <p
+                                                            class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                            Citizen
+                                                        </p>
+
+                                                        <p id="modalCitizen"
+                                                            class="mt-0.5 truncate text-sm font-semibold text-gray-800">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <!-- STAFF -->
+
+                                            <div class="rounded-xl border border-gray-200 bg-white p-4">
+
+                                                <div class="flex items-center gap-3">
+
+                                                    <div
+                                                        class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+                                                        <i class="fa-solid fa-user-tie text-xs"></i>
+                                                    </div>
+
+                                                    <div class="min-w-0">
+
+                                                        <p
+                                                            class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                                            Assigned Staff
+                                                        </p>
+
+                                                        <p id="modalStaff"
+                                                            class="mt-0.5 truncate text-sm font-semibold text-gray-800">
+                                                            —
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+                                </div>
+
+                            </aside>
+
+                        </div>
+
+                    </div>
+
+                    <!-- MODAL FOOTER ACTIONS -->
+
+                    <div
+                        class="flex shrink-0 flex-col-reverse gap-3 border-t border-gray-200 bg-white px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+                        <p class="text-xs text-gray-400">
+                            Review the complaint details before taking action.
+                        </p>
+
+                        <div class="flex gap-2">
+
+                            <button id="rejectBtn" type="button"
+                                class="rounded-lg border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white">
+                                <i></i>
+                                Reject
+                            </button>
+
+                            <button id="verifyBtn" type="button"
+                                class="rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-600">
+                                <i></i>
+                                Verify
+                            </button>
+
+                            <button id="dispatchBtn" type="button" disabled
+                                class="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i></i>
+                                Dispatch
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+     VERIFY / REJECT CONFIRMATION MODAL
+============================================================ -->
+
+        <div id="statusConfirmModal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/50 p-4">
+
+            <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl">
+
+                <div class="p-6">
+
+                    <div id="statusConfirmIcon"
+                        class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 text-green-600">
+
+                        <i id="statusConfirmIconSymbol" class="fa-solid fa-circle-check text-xl"></i>
+                    </div>
+
+                    <h2 id="statusConfirmTitle" class="text-lg font-bold text-gray-900">
+                        Confirm Action
+                    </h2>
+
+                    <p id="statusConfirmMessage" class="mt-2 text-sm leading-6 text-gray-600">
+                        Are you sure you want to continue?
+                    </p>
+
+                    <p id="statusConfirmReference" class="mt-3 text-xs font-semibold text-gray-500"></p>
+
+                </div>
+
+                <div class="flex justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4">
+
+                    <button id="cancelStatusConfirm" type="button"
+                        class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+                        Cancel
+                    </button>
+
+                    <button id="confirmStatusAction" type="button"
+                        class="rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-50">
+                        Confirm
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ============================================================
+             FULLSCREEN IMAGE VIEWER
+        ============================================================ -->
+
+        <div id="imageViewer" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[9999]">
+
+            <button id="closeImageViewer" type="button"
+                class="absolute top-5 right-6 text-white text-4xl hover:text-gray-300 transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <img id="fullImage" class="max-w-[95vw] max-h-[95vh] object-contain" alt="Full complaint evidence">
+
+        </div>
+
+        <!-- ============================================================
+             DISPATCH TEAM MODAL
+        ============================================================ -->
+
+        <div id="dispatchModal" class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+
+            <div class="bg-white rounded-2xl w-full max-w-xl">
+
+                <!-- HEADER -->
+
+                <div class="p-6 border-b">
+
+                    <h2 class="font-bold text-xl">
+                        Available Dispatch Teams
+                    </h2>
+
+                </div>
+
+                <!-- TEAM LIST -->
+
+                <div id="dispatchTeamList" class="max-h-[400px] overflow-y-auto divide-y">
+                    Loading...
+                </div>
+
+                <!-- FOOTER -->
+
+                <div class="p-5 border-t flex justify-end">
+
+                    <button id="closeDispatchModal" type="button" class="px-5 py-2 rounded-lg border">
+                        Close
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_ACTUAL_GOOGLE_MAPS_API_KEY&callback=initGoogleMap"></script>
+
+    <!-- complaint.js remains handled separately. -->
+    <!-- <script src="complaint.js"></script> -->
+
+</body>
+
+</html>

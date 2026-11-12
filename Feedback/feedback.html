@@ -1,0 +1,712 @@
+<div class="w-full px-2">
+
+    <!-- ============================================
+         SUMMARY CARDS
+    ============================================= -->
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+
+        <!-- Total Feedback -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                        Total Feedback
+                    </p>
+                    <p id="totalFeedback" class="mt-2 text-2xl font-bold text-gray-900">0</p>
+                </div>
+
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fa-solid fa-comments text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Rating -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                        Average Rating
+                    </p>
+                    <p id="averageRating" class="mt-2 text-2xl font-bold text-gray-900">0.0</p>
+                </div>
+
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
+                    <i class="fa-solid fa-star text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 Star -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                        5-Star Feedback
+                    </p>
+                    <p id="fiveStarFeedback" class="mt-2 text-2xl font-bold text-gray-900">0</p>
+                </div>
+
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
+                    <i class="fa-solid fa-star text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                        With Comments
+                    </p>
+                    <p id="commentedFeedback" class="mt-2 text-2xl font-bold text-gray-900">0</p>
+                </div>
+
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                    <i class="fa-solid fa-comment-dots text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ============================================
+         FILTERS
+    ============================================= -->
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm mb-5">
+        <div class="px-4 py-4 sm:px-5">
+
+            <div class="flex items-center gap-2 mb-3">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fa-solid fa-filter text-xs"></i>
+                </div>
+
+                <div>
+                    <p class="text-sm font-semibold text-gray-800">Filters</p>
+                    <p class="text-[11px] text-gray-400">Search and filter citizen feedback</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                <!-- Search -->
+                <div class="relative">
+                    <i
+                        class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+
+                    <input id="searchFeedback" type="text" placeholder="Search feedback..."
+                        class="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition">
+                </div>
+
+                <!-- Rating -->
+                <select id="ratingFilter"
+                    class="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition">
+
+                    <option value="All">All Ratings</option>
+                    <option value="5">★★★★★ 5 Stars</option>
+                    <option value="4">★★★★☆ 4 Stars</option>
+                    <option value="3">★★★☆☆ 3 Stars</option>
+                    <option value="2">★★☆☆☆ 2 Stars</option>
+                    <option value="1">★☆☆☆☆ 1 Star</option>
+
+                </select>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================
+         FEEDBACK TABLE
+    ============================================= -->
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+
+        <!-- TABLE HEADER -->
+
+        <div class="px-4 py-3 border-b border-gray-100">
+
+            <div class="flex flex-col sm:flex-row
+                sm:items-center
+                sm:justify-between
+                gap-3">
+
+                <!-- LEFT -->
+
+                <div class="flex items-center gap-2">
+
+                    <div class="w-8 h-8 rounded-lg
+                        bg-blue-50 text-blue-600
+                        flex items-center justify-center">
+
+                        <i class="fa-solid fa-comments text-xs"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-sm font-semibold text-gray-800">
+                            Feedback
+                        </h3>
+
+                        <p id="feedbackPageInfo" class="text-[11px] text-gray-400">
+
+                            Showing 0 of 0
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT PAGINATION -->
+
+                <div id="feedbackPagination" class="flex items-center
+                   justify-start
+                   md:justify-end
+                   gap-1
+                   flex-wrap">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="overflow-x-auto feedback-scroll">
+            <table class="w-full min-w-[900px] border-collapse">
+
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200">
+                        <th
+                            class="px-4 sm:px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            ID
+                        </th>
+
+                        <th
+                            class="px-4 sm:px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            Complaint
+                        </th>
+
+                        <th
+                            class="px-4 sm:px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            Citizen
+                        </th>
+
+                        <th
+                            class="px-4 sm:px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            Rating
+                        </th>
+
+                        <th
+                            class="px-4 sm:px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            Comments
+                        </th>
+
+                        <th
+                            class="px-4 sm:px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            Date
+                        </th>
+
+                        <th
+                            class="px-4 sm:px-5 py-3 text-center text-[10px] font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody id="feedbackTable" class="divide-y divide-gray-100 bg-white">
+
+                    <tr>
+                        <td colspan="7" class="py-16 text-center text-gray-400">
+                            Loading feedback...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ============================================
+     VIEW FEEDBACK MODAL
+============================================= -->
+
+<div id="feedbackModal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-3 sm:px-5
+           bg-slate-950/50 backdrop-blur-[3px]">
+
+    <div class="relative w-full max-w-2xl max-h-[92vh] overflow-hidden
+               rounded-2xl bg-white shadow-2xl
+               border border-gray-200 flex flex-col">
+
+        <!-- =========================================
+             MODAL HEADER
+        ========================================== -->
+
+        <div class="shrink-0 border-b border-gray-100 bg-white">
+
+            <div class="flex items-start justify-between gap-4 px-5 sm:px-6 py-5">
+
+                <div class="flex items-start gap-3 min-w-0">
+
+                    <!-- Icon -->
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center
+                                rounded-xl bg-blue-50 text-blue-600">
+
+                        <i class="fa-solid fa-message text-sm"></i>
+
+                    </div>
+
+                    <!-- Title -->
+                    <div class="min-w-0">
+
+                        <div class="flex items-center gap-2 flex-wrap">
+
+                            <h2 class="text-base sm:text-lg font-bold text-gray-900">
+                                Feedback Details
+                            </h2>
+
+                            <span class="inline-flex items-center rounded-full
+                                       bg-gray-100 px-2 py-0.5
+                                       text-[10px] font-semibold text-gray-500">
+                                Citizen Feedback
+                            </span>
+
+                        </div>
+
+                        <p class="mt-1 text-xs text-gray-400">
+                            Review the citizen's feedback and complaint details.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Close -->
+                <button id="closeFeedbackModal" type="button" aria-label="Close feedback details" class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-lg text-gray-400
+                           hover:bg-gray-100 hover:text-gray-700
+                           transition duration-150">
+
+                    <i class="fa-solid fa-xmark text-sm"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================================
+             MODAL BODY
+        ========================================== -->
+
+        <div class="overflow-y-auto flex-1 px-5 sm:px-6 py-5">
+
+            <div class="space-y-5">
+
+
+                <!-- =================================
+                     RATING HERO
+                ================================== -->
+
+                <div class="rounded-xl border border-blue-100
+                           bg-gradient-to-br from-blue-50/80 to-white
+                           p-4 sm:p-5">
+
+                    <div class="flex flex-col sm:flex-row
+                                sm:items-center sm:justify-between gap-4">
+
+                        <div>
+
+                            <p class="text-[10px] font-semibold uppercase
+                                      tracking-wider text-blue-500">
+                                Citizen Rating
+                            </p>
+
+                            <div class="flex items-center gap-3 mt-2">
+
+                                <span id="modalRatingNumber" class="text-2xl sm:text-3xl font-bold text-gray-900">
+                                    5 / 5
+                                </span>
+
+                                <div class="h-6 w-px bg-gray-200"></div>
+
+                                <span id="modalRatingStars" class="text-amber-400 text-lg sm:text-xl tracking-wide">
+                                    ★★★★★
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="flex h-11 w-11 items-center justify-center
+                                   rounded-xl bg-white border border-blue-100
+                                   text-amber-400 shadow-sm">
+
+                            <i class="fa-solid fa-star text-base"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     FEEDBACK MESSAGE
+                ================================== -->
+
+                <div>
+
+                    <div class="flex items-center gap-2 mb-2">
+
+                        <div class="flex h-7 w-7 items-center justify-center
+                                   rounded-lg bg-gray-100 text-gray-500">
+
+                            <i class="fa-solid fa-comment-dots text-[11px]"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-semibold text-gray-800">
+                                Citizen's Feedback
+                            </p>
+
+                            <p class="text-[10px] text-gray-400">
+                                Comment submitted with the rating
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="relative rounded-xl border border-gray-200
+                               bg-gray-50 px-4 py-4 sm:px-5">
+
+                        <!-- Quote mark -->
+                        <div class="absolute top-3 right-4
+                                   text-3xl leading-none text-gray-200
+                                   select-none">
+                            "
+                        </div>
+
+                        <p id="modalComment" class="relative pr-6 text-sm leading-6
+                                   text-gray-700 whitespace-pre-line">
+                            No comment provided.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     COMPLAINT INFORMATION
+                ================================== -->
+
+                <div>
+
+                    <div class="flex items-center gap-2 mb-2">
+
+                        <div class="flex h-7 w-7 items-center justify-center
+                                   rounded-lg bg-blue-50 text-blue-600">
+
+                            <i class="fa-solid fa-file-lines text-[11px]"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-semibold text-gray-800">
+                                Complaint Information
+                            </p>
+
+                            <p class="text-[10px] text-gray-400">
+                                Complaint associated with this feedback
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="rounded-xl border border-gray-200
+                               bg-white overflow-hidden">
+
+                        <!-- Complaint ID -->
+                        <div class="flex items-center justify-between gap-4
+                                   px-4 sm:px-5 py-3.5
+                                   border-b border-gray-100">
+
+                            <div>
+
+                                <p class="text-[10px] font-semibold uppercase
+                                          tracking-wider text-gray-400">
+                                    Complaint ID
+                                </p>
+
+                            </div>
+
+                            <p id="modalComplaintID" class="text-sm font-semibold text-blue-600">
+                                --
+                            </p>
+
+                        </div>
+
+
+                        <!-- Complaint Text -->
+                        <div class="px-4 sm:px-5 py-4">
+
+                            <p class="text-[10px] font-semibold uppercase
+                                      tracking-wider text-gray-400 mb-2">
+                                Report
+                            </p>
+
+                            <p id="modalComplaintText" class="text-sm leading-6 text-gray-700
+                                       whitespace-pre-line">
+                                --
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     CITIZEN + DATE
+                ================================== -->
+
+                <div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2
+                                gap-3">
+
+                        <!-- Citizen -->
+                        <div class="rounded-xl border border-gray-200
+                                   bg-white p-4">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="flex h-8 w-8 shrink-0 items-center
+                                           justify-center rounded-lg
+                                           bg-gray-100 text-gray-500">
+
+                                    <i class="fa-solid fa-user text-xs"></i>
+
+                                </div>
+
+                                <div class="min-w-0">
+
+                                    <p class="text-[10px] font-semibold uppercase
+                                              tracking-wider text-gray-400">
+                                        Citizen
+                                    </p>
+
+                                    <p id="modalCitizenName" class="mt-1 text-sm font-semibold
+                                               text-gray-800 truncate">
+                                        --
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date -->
+                        <div class="rounded-xl border border-gray-200
+                                   bg-white p-4">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="flex h-8 w-8 shrink-0 items-center
+                                           justify-center rounded-lg
+                                           bg-gray-100 text-gray-500">
+
+                                    <i class="fa-regular fa-calendar text-xs"></i>
+
+                                </div>
+
+                                <div class="min-w-0">
+
+                                    <p class="text-[10px] font-semibold uppercase
+                                              tracking-wider text-gray-400">
+                                        Submitted
+                                    </p>
+
+                                    <p id="modalDate" class="mt-1 text-sm font-semibold
+                                               text-gray-800">
+                                        --
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     FEEDBACK ID
+                ================================== -->
+
+                <div class="flex items-center justify-between gap-4
+                           rounded-xl border border-gray-100
+                           bg-gray-50 px-4 py-3">
+
+                    <div class="flex items-center gap-2">
+
+                        <i class="fa-solid fa-hashtag text-[10px] text-gray-400"></i>
+
+                        <span class="text-[10px] font-semibold uppercase
+                                   tracking-wider text-gray-400">
+                            Feedback ID
+                        </span>
+
+                    </div>
+
+                    <span id="modalFeedbackID" class="text-xs font-semibold text-gray-600">
+                        --
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================================
+             FOOTER
+        ========================================== -->
+
+        <div class="shrink-0 flex items-center justify-end
+                   border-t border-gray-100
+                   bg-gray-50/80 px-5 sm:px-6 py-3.5">
+
+            <button id="closeFeedbackModalBottom" type="button" class="inline-flex items-center justify-center
+                       rounded-lg bg-white
+                       border border-gray-200
+                       px-4 py-2
+                       text-xs sm:text-sm font-semibold text-gray-600
+                       shadow-sm
+                       hover:bg-gray-50 hover:text-gray-800
+                       transition duration-150">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+    /* ============================================
+       FEEDBACK SCROLLBAR
+    ============================================= */
+
+    .feedback-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: #d1d5db transparent;
+    }
+
+    .feedback-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .feedback-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .feedback-scroll::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 999px;
+    }
+
+    .feedback-scroll::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+    }
+
+
+    /* ============================================
+       TABLE HOVER
+    ============================================= */
+
+    #feedbackTable tr {
+        transition: background-color 0.15s ease;
+    }
+
+    #feedbackTable tr:hover {
+        background-color: #f8fafc;
+    }
+
+
+    /* ============================================
+       MODAL SCROLLBAR
+    ============================================= */
+
+    #feedbackModal .overflow-y-auto {
+        scrollbar-width: thin;
+        scrollbar-color: #d1d5db transparent;
+    }
+
+    #feedbackModal .overflow-y-auto::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #feedbackModal .overflow-y-auto::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #feedbackModal .overflow-y-auto::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 999px;
+    }
+
+    #feedbackModal .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+    }
+
+
+    /* ============================================
+       MOBILE TABLE
+    ============================================= */
+
+    @media (max-width: 640px) {
+
+        #feedbackTable th,
+        #feedbackTable td {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+    }
+</style>

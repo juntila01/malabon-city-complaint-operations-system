@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Account | Complaint System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+
+<body class="bg-blue-50 text-slate-900">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+
+        <div class="w-full max-w-[480px] bg-white rounded-2xl shadow-xl p-6 sm:p-10 border border-blue-100 my-6">
+
+            <div class="text-center mb-8">
+                <div
+                    class="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 mb-4 transition-transform hover:scale-105">
+                    <img src="../assets/ahon.png" alt="Malabon City Logo" class="w-full h-full object-contain">
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Create an Account</h2>
+                <p class="text-sm text-gray-500 mt-2">Register for the Malabon City Complaint System</p>
+            </div>
+
+            <!-- Dynamic Error Banner managed by register.js -->
+            <div id="error-banner"
+                class="hidden mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600 font-medium">
+                Registration failed. Please double-check your inputs or try again.
+            </div>
+
+            <form action="register.php" method="POST" enctype="multipart/form-data" class="space-y-5">
+
+                <div>
+                    <label for="fullname" class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Full
+                        Name</label>
+                    <input type="text" id="fullname" name="fullname" required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent outline-none transition-all text-sm"
+                        placeholder="Juan Dela Cruz">
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Email
+                        Address</label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent outline-none transition-all text-sm"
+                        placeholder="name@example.com">
+                </div>
+
+                <div>
+                    <label for="contact_number" class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Contact
+                        Number</label>
+                    <input type="tel" id="contact_number" name="contact_number" required pattern="[0-9]{11}"
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent outline-none transition-all text-sm"
+                        placeholder="09123456789">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
+                        Password
+                    </label>
+
+                    <div class="relative flex items-center">
+                        <input type="password" id="password" name="password" required minlength="8"
+                            class="w-full px-4 py-3 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent outline-none transition-all text-sm"
+                            placeholder="Create a strong password">
+
+                        <button type="button" id="password-toggle"
+                            class="absolute right-4 text-gray-400 hover:text-gray-600">
+
+                            <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S3.732 16.057 2.458 12" />
+                            </svg>
+
+                            <svg id="eye-off-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                            </svg>
+
+                        </button>
+                    </div>
+
+                    <div id="passwordRequirements" class="mt-3 space-y-1.5 text-sm hidden">
+
+                        <p id="req-length" class="flex items-center gap-2 text-gray-500">
+                            <span class="req-icon">○</span>
+                            <span>At least 8 characters</span>
+                        </p>
+
+                        <p id="req-upper" class="flex items-center gap-2 text-gray-500">
+                            <span class="req-icon">○</span>
+                            <span>At least one uppercase letter (A-Z)</span>
+                        </p>
+
+                        <p id="req-lower" class="flex items-center gap-2 text-gray-500">
+                            <span class="req-icon">○</span>
+                            <span>At least one lowercase letter (a-z)</span>
+                        </p>
+
+                        <p id="req-number" class="flex items-center gap-2 text-gray-500">
+                            <span class="req-icon">○</span>
+                            <span>At least one number (0-9)</span>
+                        </p>
+
+                        <p id="req-special" class="flex items-center gap-2 text-gray-500">
+                            <span class="req-icon">○</span>
+                            <span>At least one special character (!@#$...)</span>
+                        </p>
+
+                    </div>
+
+                    <p id="passwordStrength" class="mt-2 text-sm font-medium hidden">
+                    </p>
+
+                </div>
+
+                <div>
+                    <label for="confirm_password" class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Confirm
+                        Password</label>
+
+                    <div class="relative flex items-center">
+                        <input type="password" id="confirm_password" name="confirm_password" required
+                            class="w-full px-4 py-3 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent outline-none transition-all text-sm"
+                            placeholder="••••••••">
+
+                        <button type="button" id="confirm-password-toggle"
+                            class="absolute right-4 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors">
+
+                            <svg id="confirm-eye-icon" class="w-5 h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-3.057-9.543-7z">
+                                </path>
+                            </svg>
+
+                            <svg id="confirm-eye-off-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18">
+                                </path>
+                            </svg>
+
+                        </button>
+                    </div>
+                </div>
+
+                <p id="passwordMatch" class="mt-2 text-sm font-medium hidden"></p>
+
+                <button id="registerBtn" type="submit" disabled
+                    class="w-full py-3.5 bg-gray-400 text-white font-bold rounded-xl cursor-not-allowed transition-all mt-2">
+                    Create Account
+                </button>
+
+            </form>
+
+            <!-- =========================================================
+             GOOGLE SIGN UP
+             This does NOT replace the existing registration form.
+             ========================================================= -->
+
+            <div class="flex items-center gap-3 my-6">
+                <div class="flex-1 h-px bg-gray-200"></div>
+                <span class="text-xs font-medium text-gray-400 uppercase">or</span>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+
+            <div class="flex justify-center">
+                <div id="googleSignUpButton"></div>
+            </div>
+
+            <div class="mt-6 text-center text-sm">
+                <span class="text-gray-500">Already have an account?</span>
+                <a href="login.html" class="text-blue-600 font-semibold hover:text-blue-700 hover:underline ml-1">Log
+                    In</a>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-xs text-slate-400">© 2026 Malabon Action Team</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="register.js"></script>
+
+    <script>
+        /*
+         * Google Sign Up
+         *
+         * IMPORTANT:
+         * Replace YOUR_GOOGLE_CLIENT_ID with the Client ID
+         * generated in Google Cloud.
+         *
+         * We are NOT creating the citizen account directly here yet.
+         * The Google credential will be sent to google_signup.php
+         * after we create that backend endpoint.
+         */
+
+        window.onload = function () {
+
+            if (typeof google === "undefined" || !google.accounts || !google.accounts.id) {
+                console.error("Google Identity Services failed to load.");
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: "964361808717-6k3d0petdsj3v3c2kqlvjqabv9fhefjj.apps.googleusercontent.com",
+                callback: handleGoogleSignUp,
+                ux_mode: "popup"
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignUpButton"),
+                {
+                    theme: "outline",
+                    size: "large",
+                    width: 360,
+                    text: "signup_with",
+                    shape: "rectangular",
+                    logo_alignment: "left"
+                }
+            );
+        };
+
+        async function handleGoogleSignUp(response) {
+
+            if (!response || !response.credential) {
+                showGoogleError("Google authentication failed. Please try again.");
+                return;
+            }
+
+            try {
+
+                const formData = new FormData();
+
+                formData.append("action", "verify");
+                formData.append("credential", response.credential);
+
+                const request = await fetch("google_signup.php", {
+                    method: "POST",
+                    body: formData,
+                    credentials: "same-origin"
+                });
+
+                const result = await request.json();
+
+                if (!result.success) {
+                    showGoogleError(result.message || "Google signup failed.");
+                    return;
+                }
+
+                /*
+                 * Existing Google account.
+                 * The PHP backend already created the session.
+                 */
+                if (result.action === "login") {
+
+                    window.location.href = result.redirect;
+                    return;
+                }
+
+                /*
+                 * New Google account.
+                 * We need the citizen's contact number.
+                 */
+                if (result.action === "complete_registration") {
+
+                    const contactNumber = prompt(
+                        "Enter your 11-digit mobile number to complete registration:"
+                    );
+
+                    if (contactNumber === null) {
+                        return;
+                    }
+
+                    const cleanedNumber = contactNumber.trim();
+
+                    if (!/^[0-9]{11}$/.test(cleanedNumber)) {
+
+                        showGoogleError(
+                            "Please enter a valid 11-digit contact number."
+                        );
+
+                        return;
+                    }
+
+                    const completeForm = new FormData();
+
+                    completeForm.append(
+                        "action",
+                        "complete_registration"
+                    );
+
+                    completeForm.append(
+                        "contact_number",
+                        cleanedNumber
+                    );
+
+                    const completeRequest = await fetch(
+                        "google_signup.php",
+                        {
+                            method: "POST",
+                            body: completeForm,
+                            credentials: "same-origin"
+                        }
+                    );
+
+                    const completeResult =
+                        await completeRequest.json();
+
+                    if (!completeResult.success) {
+
+                        showGoogleError(
+                            completeResult.message ||
+                            "Unable to complete Google registration."
+                        );
+
+                        return;
+                    }
+
+                    if (completeResult.action === "registered") {
+
+                        window.location.href =
+                            completeResult.redirect;
+
+                        return;
+                    }
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Google signup error:",
+                    error
+                );
+
+                showGoogleError(
+                    "Unable to connect to the server. Please try again."
+                );
+            }
+        }
+
+
+        function showGoogleError(message) {
+
+            const errorBanner =
+                document.getElementById("error-banner");
+
+            if (!errorBanner) {
+                alert(message);
+                return;
+            }
+
+            errorBanner.textContent = message;
+
+            errorBanner.classList.remove("hidden");
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    </script>
+</body>
+
+</html>

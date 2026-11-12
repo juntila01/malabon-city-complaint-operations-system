@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>My Complaints | Malabon CitizenCare</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+       BASE
+    ============================================================ */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            padding-bottom: 92px;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+
+
+        /* ============================================================
+       PAGE HEADER
+    ============================================================ */
+
+        .page-header {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+
+        /* ============================================================
+       SUMMARY CARDS
+    ============================================================ */
+
+        .summary-card {
+            position: relative;
+            overflow: hidden;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 18px;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            border-color: #dbeafe;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+        }
+
+        .summary-card::after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 999px;
+            background: #eff6ff;
+            right: -28px;
+            top: -28px;
+            opacity: 0.7;
+        }
+
+
+        /* ============================================================
+       COMPLAINT LIST
+    ============================================================ */
+
+        .complaints-section {
+            background: transparent;
+        }
+
+        #complaintsList {
+            min-height: 180px;
+        }
+
+        #complaintsList>div {
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+
+        /* ============================================================
+       PROGRESS TRACKER
+    ============================================================ */
+
+        .progress-step {
+            position: relative;
+        }
+
+        .progress-icon {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+
+            border-radius: 9999px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #e2e8f0;
+            color: #94a3b8;
+
+            border: 2px solid #e2e8f0;
+
+            transition: all 0.25s ease;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #94a3b8;
+
+            transition: color 0.25s ease;
+        }
+
+        .progress-description {
+            font-size: 0.7rem;
+            line-height: 1.45;
+            color: #cbd5e1;
+
+            margin-top: 3px;
+        }
+
+        .progress-line {
+            width: 2px;
+            height: 26px;
+
+            background: #e2e8f0;
+
+            margin-left: 15px;
+        }
+
+
+        /* COMPLETED */
+
+        .progress-step.completed .progress-icon {
+            background: #16a34a;
+            border-color: #16a34a;
+            color: white;
+        }
+
+        .progress-step.completed .progress-label {
+            color: #334155;
+        }
+
+        .progress-step.completed .progress-description {
+            color: #94a3b8;
+        }
+
+        .progress-step.completed .progress-line {
+            background: #16a34a;
+        }
+
+
+        /* CURRENT */
+
+        .progress-step.current .progress-icon {
+            background: white;
+            border-color: #2563eb;
+            color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.10),
+                0 5px 14px rgba(37, 99, 235, 0.12);
+        }
+
+        .progress-step.current .progress-label {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .progress-step.current .progress-description {
+            color: #64748b;
+        }
+
+
+        /* REJECTED */
+
+        .progress-step.rejected .progress-icon {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        .progress-step.rejected .progress-label {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .progress-step.rejected .progress-description {
+            color: #ef4444;
+        }
+
+        /* ============================================================
+PROGRESS ICONS
+============================================================ */
+
+        .progress-icon i {
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        /* GREEN = COMPLETED */
+
+        .progress-step.completed .progress-icon {
+            background: #16a34a;
+            border-color: #16a34a;
+            color: #ffffff;
+        }
+
+        .progress-step.completed .progress-icon i {
+            color: #ffffff;
+        }
+
+        /* BLUE = CURRENT */
+
+        .progress-step.current .progress-icon {
+            background: #ffffff;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .progress-step.current .progress-icon i {
+            color: #2563eb;
+        }
+
+        /* RED = REJECTED / UNABLE TO RESOLVE */
+
+        .progress-step.rejected .progress-icon {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
+        }
+
+        .progress-step.rejected .progress-icon i {
+            color: #ffffff;
+            font-size: 13px;
+        }
+
+
+
+        /* ============================================================
+       MOBILE BOTTOM NAVIGATION
+    ============================================================ */
+
+        .mobile-bottom-nav {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 100;
+
+            padding:
+                8px 12px calc(8px + env(safe-area-inset-bottom));
+
+            pointer-events: none;
+        }
+
+        .mobile-bottom-nav-inner {
+            max-width: 560px;
+            margin: 0 auto;
+
+            height: 68px;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(226, 232, 240, 0.95);
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 14px 40px rgba(15, 23, 42, 0.13),
+                0 2px 8px rgba(15, 23, 42, 0.06);
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr 1.15fr 1fr 1fr;
+
+            align-items: center;
+
+            padding: 5px;
+
+            pointer-events: auto;
+        }
+
+        .bottom-nav-item {
+            height: 58px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 3px;
+
+            border-radius: 18px;
+
+            color: #94a3b8;
+
+            font-size: 9px;
+            font-weight: 700;
+
+            transition: all 0.2s ease;
+
+            text-decoration: none;
+
+            border: none;
+            background: transparent;
+        }
+
+        .bottom-nav-item svg {
+            width: 20px;
+            height: 20px;
+
+            transition:
+                transform 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .bottom-nav-item:hover {
+            color: #2563eb;
+            background: #f8fafc;
+        }
+
+        .bottom-nav-item.active {
+            color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .bottom-nav-item.active svg {
+            transform: translateY(-1px);
+        }
+
+
+        /* ============================================================
+       REPORT BUTTON
+    ============================================================ */
+
+        .bottom-report-button {
+            position: relative;
+
+            height: 58px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 3px;
+
+            color: white;
+
+            font-size: 9px;
+            font-weight: 800;
+
+            border: none;
+
+            background: transparent;
+        }
+
+        .bottom-report-icon {
+            width: 48px;
+            height: 48px;
+
+            margin-top: -25px;
+
+            border-radius: 17px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #2563eb;
+            color: white;
+
+            border: 4px solid #f8fafc;
+
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.30);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .bottom-report-button:hover .bottom-report-icon {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 11px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .bottom-report-button:active .bottom-report-icon {
+            transform: scale(0.95);
+        }
+
+        .bottom-report-label {
+            color: #2563eb;
+            margin-top: 1px;
+        }
+
+
+        /* ============================================================
+       MODALS
+    ============================================================ */
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.62);
+
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .modal-panel {
+            border-radius: 26px;
+
+            box-shadow:
+                0 25px 70px rgba(15, 23, 42, 0.25);
+        }
+
+
+        /* Prevent background page scroll while modal is open */
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+
+        /* ============================================================
+       MAP
+    ============================================================ */
+
+        #complaintMap {
+            min-height: 280px;
+        }
+
+
+        /* ============================================================
+       FEEDBACK STARS
+    ============================================================ */
+
+        .feedbackStar {
+            border: none;
+            background: transparent;
+            padding: 2px;
+        }
+
+        .feedbackStar svg {
+            pointer-events: none;
+        }
+
+
+        /* ============================================================
+       MOBILE
+    ============================================================ */
+
+        @media (max-width: 640px) {
+
+            body {
+                padding-bottom: 88px;
+            }
+
+            main {
+                padding-top: 20px !important;
+            }
+
+            .modal-panel {
+                border-radius: 24px;
+            }
+
+        }
+
+
+        /* ============================================================
+       DESKTOP
+    ============================================================ */
+
+        @media (min-width: 768px) {
+
+            .mobile-bottom-nav {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+        }
+    </style>
+
+
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
+
+
+    <!-- ============================================================
+     TOP NAVIGATION
+============================================================ -->
+
+    <nav class="page-header sticky top-0 z-50 border-b border-slate-200/80">
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+            <div class="h-[72px] flex items-center justify-between gap-4">
+
+                <div class="flex items-center gap-3 min-w-0">
+
+                    <button onclick="history.back()" type="button"
+                        class="w-10 h-10 shrink-0 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition"
+                        aria-label="Go back">
+
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+
+                        </svg>
+
+                    </button>
+
+
+                    <div class="min-w-0">
+
+                        <div class="flex items-center gap-2">
+
+                            <h1 class="font-extrabold text-lg text-slate-900 truncate">
+                                My Complaints
+                            </h1>
+
+                            <span
+                                class="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[9px] font-bold uppercase tracking-wide">
+                                CitizenCare
+                            </span>
+
+                        </div>
+
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Track your submitted reports
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="w-10 h-10 shrink-0 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-.684-.057-1.355-.164-2.016z" />
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ============================================================
+     MAIN CONTENT
+============================================================ -->
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+
+
+        <!-- INTRO -->
+
+        <section class="mb-6">
+
+            <div
+                class="rounded-[24px] bg-gradient-to-br from-blue-600 to-blue-700 text-white p-5 sm:p-6 shadow-lg shadow-blue-600/15 overflow-hidden relative">
+
+                <div class="absolute -right-10 -top-10 w-36 h-36 rounded-full bg-white/10"></div>
+
+                <div class="absolute -right-16 -bottom-20 w-48 h-48 rounded-full bg-white/5"></div>
+
+
+                <div class="relative">
+
+                    <div class="flex items-center gap-2 mb-2">
+
+                        <span class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a3 3 0 006 0" />
+
+                            </svg>
+
+                        </span>
+
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-100">
+                            Your Reports
+                        </span>
+
+                    </div>
+
+
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">
+                        Keep track of your complaints
+                    </h2>
+
+                    <p class="text-sm text-blue-100 mt-1.5 max-w-xl leading-relaxed">
+                        See the current status and progress of every report
+                        you've submitted to Malabon CitizenCare.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SUMMARY -->
+
+        <section class="mb-7">
+
+            <div class="grid grid-cols-2 gap-3 sm:gap-4">
+
+
+                <!-- TOTAL -->
+
+                <div class="summary-card">
+
+                    <div class="flex items-start justify-between gap-3">
+
+                        <div>
+
+                            <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
+                                Total Complaints
+                            </p>
+
+                            <p id="totalComplaints" class="text-3xl font-extrabold text-slate-900 mt-2">
+                                0
+                            </p>
+
+                            <p class="text-[10px] text-slate-400 mt-1">
+                                Reports submitted
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center relative z-10">
+
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESOLVED -->
+
+                <div class="summary-card">
+
+                    <div class="flex items-start justify-between gap-3">
+
+                        <div>
+
+                            <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
+                                Resolved
+                            </p>
+
+                            <p id="resolvedComplaints" class="text-3xl font-extrabold text-green-600 mt-2">
+                                0
+                            </p>
+
+                            <p class="text-[10px] text-slate-400 mt-1">
+                                Successfully completed
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center relative z-10">
+
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- COMPLAINT LIST -->
+
+        <section class="complaints-section">
+
+            <div class="flex items-end justify-between mb-4">
+
+                <div>
+
+                    <p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-600">
+                        Activity
+                    </p>
+
+                    <h2 class="text-lg font-extrabold text-slate-900 mt-0.5">
+                        Your Reports
+                    </h2>
+
+                </div>
+
+                <span class="text-xs text-slate-400">
+                    Latest updates
+                </span>
+
+            </div>
+
+
+            <div id="complaintsList" class="space-y-4">
+
+                <div class="bg-white border border-slate-200 rounded-[22px] p-10 text-center shadow-sm">
+
+                    <div
+                        class="w-10 h-10 border-[3px] border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4">
+                    </div>
+
+                    <p class="text-sm font-semibold text-slate-700">
+                        Loading your complaints...
+                    </p>
+
+                    <p class="text-xs text-slate-400 mt-1">
+                        Please wait while we retrieve your reports.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ============================================================
+     MOBILE BOTTOM NAVIGATION
+============================================================ -->
+
+    <nav class="mobile-bottom-nav" aria-label="Citizen navigation">
+
+        <div class="mobile-bottom-nav-inner">
+
+
+            <!-- HOME -->
+
+            <a href="citizen.php" class="bottom-nav-item">
+
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-10.5z" />
+
+                </svg>
+
+                <span>Home</span>
+
+            </a>
+
+
+
+            <!-- COMPLAINTS -->
+
+            <a href="myComplaints.html" class="bottom-nav-item active" aria-current="page">
+
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <path fill="none" stroke="currentColor" stroke-width="1.8"
+                        d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+
+                    <path stroke-linecap="round" stroke-width="1.8" d="M8.5 8h7M8.5 12h7M8.5 16h4" />
+
+                </svg>
+
+                <span>Complaints</span>
+
+            </a>
+
+
+
+            <!-- REPORT -->
+
+            <button type="button" class="bottom-report-button"
+                onclick="window.location.href='../Complaints/complaintForm.html'">
+
+                <span class="bottom-report-icon">
+
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 5v14M5 12h14" />
+
+                    </svg>
+
+                </span>
+
+                <span class="bottom-report-label">
+                    Report
+                </span>
+
+            </button>
+
+
+
+            <!-- ALERTS -->
+
+            <button type="button" class="bottom-nav-item" onclick="window.location.href='notifications.html'">
+
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M15 17h5l-1.5-2.2V10a6.5 6.5 0 00-13 0v4.8L4 17h5" />
+
+                    <path stroke-linecap="round" stroke-width="1.8" d="M10 20h4" />
+
+                </svg>
+
+                <span>Alerts</span>
+
+            </button>
+
+
+
+            <!-- PROFILE -->
+
+            <button type="button" class="bottom-nav-item" onclick="window.location.href='citizenProfile.php'">
+
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <circle cx="12" cy="8" r="3.5" stroke-width="1.8" />
+
+                    <path stroke-linecap="round" stroke-width="1.8" d="M5 21a7 7 0 0114 0" />
+
+                </svg>
+
+                <span>Profile</span>
+
+            </button>
+
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ============================================================
+     VIEW COMPLAINT MODAL
+============================================================ -->
+
+    <div id="complaintViewModal"
+        class="hidden fixed inset-0 z-[999] modal-backdrop flex items-center justify-center p-3 sm:p-4" role="dialog"
+        aria-modal="true" aria-labelledby="viewComplaintID">
+
+        <div class="modal-panel bg-white w-full max-w-lg max-h-[92vh] overflow-hidden flex flex-col">
+
+
+            <!-- HEADER -->
+
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200 shrink-0">
+
+                <div class="min-w-0">
+
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-blue-600">
+                        Complaint Details
+                    </p>
+
+                    <h2 id="viewComplaintID" class="text-lg font-extrabold text-slate-900 mt-0.5">
+                        #--
+                    </h2>
+
+                </div>
+
+
+                <button id="closeComplaintModal" type="button"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition shrink-0"
+                    aria-label="Close complaint">
+
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- CONTENT -->
+
+            <div class="overflow-y-auto p-5 space-y-6" id="complaintModalContent">
+
+
+                <!-- STATUS -->
+
+                <div
+                    class="rounded-2xl bg-slate-50 border border-slate-100 p-4 flex items-center justify-between gap-4">
+
+                    <div>
+
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Current Status
+                        </p>
+
+                        <span id="viewComplaintStatus"
+                            class="inline-flex mt-2 px-3 py-1.5 rounded-full text-xs font-bold">
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <div class="text-right">
+
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Urgency
+                        </p>
+
+                        <p id="viewComplaintUrgency" class="text-sm font-extrabold text-slate-800 mt-1">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PROGRESS -->
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-4">
+
+                    <div class="mb-5">
+
+                        <p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-600">
+                            Complaint Progress
+                        </p>
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            Track the progress of your report
+                        </p>
+
+                    </div>
+
+
+                    <div id="complaintProgressTracker" class="space-y-0">
+
+
+                        <!-- SUBMITTED -->
+
+                        <div class="progress-step" data-step="submitted">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Complaint Submitted
+                                    </p>
+
+                                    <p class="progress-description">
+                                        Your report has been received.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="progress-line"></div>
+
+                        </div>
+
+
+
+                        <!-- REVIEW -->
+
+                        <div class="progress-step" data-step="review">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Under Review
+                                    </p>
+
+                                    <p class="progress-description">
+                                        Your report is being reviewed by the administration.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="progress-line"></div>
+
+                        </div>
+
+
+
+                        <!-- VERIFIED -->
+
+                        <div class="progress-step" data-step="verified">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Verified
+                                    </p>
+
+                                    <p class="progress-description">
+                                        Your report has been verified.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="progress-line"></div>
+
+                        </div>
+
+
+
+                        <!-- ASSIGNED -->
+
+                        <div class="progress-step" data-step="assigned">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Assigned to Response Team
+                                    </p>
+
+                                    <p class="progress-description">
+                                        A response team has been assigned to your report.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="progress-line"></div>
+
+                        </div>
+
+
+
+                        <!-- ACCEPTED -->
+
+                        <div class="progress-step" data-step="accepted">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Accepted by Response Team
+                                    </p>
+
+                                    <p class="progress-description">
+                                        The response team has accepted the assignment.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="progress-line"></div>
+
+                        </div>
+
+
+
+                        <!-- ARRIVED -->
+
+                        <div class="progress-step" data-step="arrived">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <circle cx="12" cy="12" r="3" stroke-width="2" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Arrived / On Site
+                                    </p>
+
+                                    <p class="progress-description">
+                                        The response team is responding at the reported location.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="progress-line"></div>
+
+                        </div>
+
+
+
+                        <!-- RESOLVED -->
+
+                        <div class="progress-step" data-step="resolved">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Resolved
+                                    </p>
+
+                                    <p class="progress-description">
+                                        Your complaint has been resolved.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- REJECTED -->
+
+                        <div class="progress-step hidden" data-step="rejected">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="progress-icon">
+
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="flex-1 pt-0.5">
+
+                                    <p class="progress-label">
+                                        Complaint Rejected
+                                    </p>
+
+                                    <p class="progress-description">
+                                        Your report was rejected after review.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CATEGORY -->
+
+                <div>
+
+                    <p class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                        Category
+                    </p>
+
+                    <p id="viewComplaintCategory" class="mt-1.5 text-base font-extrabold text-slate-800">
+                        --
+                    </p>
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div>
+
+                    <p class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                        Your Complaint
+                    </p>
+
+                    <div class="mt-2 bg-slate-50 border border-slate-100 rounded-2xl p-4">
+
+                        <p id="viewComplaintDescription"
+                            class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LOCATION -->
+
+                <div>
+
+                    <p class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                        Location
+                    </p>
+
+
+                    <div class="mt-2 flex items-start gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-4">
+
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 21s8-7.2 8-12a8 8 0 10-16 0c0 4.8 8 12 8 12z" />
+
+                                <circle cx="12" cy="9" r="2.5" />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="min-w-0">
+
+                            <p id="viewComplaintLocation" class="text-sm font-bold text-slate-800 break-words">
+                                Location unavailable
+                            </p>
+
+                            <p id="viewComplaintCoordinates" class="text-xs text-slate-400 mt-1"></p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DISPATCH MAP -->
+
+                    <div id="complaintMapSection" class="hidden mt-4">
+
+                        <div class="flex items-center justify-between gap-3 mb-2">
+
+                            <p class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                                Dispatch Team Location
+                            </p>
+
+                            <span id="dispatchTrackingStatus" class="text-xs font-medium text-slate-400 text-right">
+                                Waiting for location...
+                            </span>
+
+                        </div>
+
+
+                        <div class="rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+
+                            <div id="complaintMap" class="w-full h-72"></div>
+
+                        </div>
+
+
+                        <div class="mt-3 grid grid-cols-2 gap-2">
+
+                            <div class="bg-red-50 border border-red-100 rounded-xl p-3">
+
+                                <div class="flex items-center gap-2">
+
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+
+                                    <p class="text-xs font-bold text-red-700">
+                                        Complaint Site
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
+
+                                <div class="flex items-center gap-2">
+
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+
+                                    <p class="text-xs font-bold text-blue-700">
+                                        Dispatch Team
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <p class="text-xs text-slate-400 mt-2">
+                            The blue marker shows the current location of the
+                            assigned dispatch team.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DATE / DEADLINE -->
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Submitted
+                        </p>
+
+                        <p id="viewComplaintDate" class="text-sm font-bold text-slate-700 mt-1.5">
+                            --
+                        </p>
+
+                    </div>
+
+
+                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Deadline
+                        </p>
+
+                        <p id="viewComplaintDeadline" class="text-sm font-bold text-slate-700 mt-1.5">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- EVIDENCE -->
+
+                <div id="viewComplaintEvidenceSection" class="hidden">
+
+                    <p class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                        Evidence
+                    </p>
+
+
+                    <img id="viewComplaintImage"
+                        class="hidden mt-2 w-full max-h-72 object-contain rounded-2xl border border-slate-200 bg-slate-100"
+                        alt="Complaint evidence">
+
+
+                    <video id="viewComplaintVideo"
+                        class="hidden mt-2 w-full max-h-72 rounded-2xl border border-slate-200 bg-black object-contain"
+                        controls playsinline preload="metadata"></video>
+
+                </div>
+
+
+
+                <!-- FEEDBACK -->
+
+                <div id="viewComplaintFeedbackSection" class="hidden border-t border-slate-200 pt-5">
+
+                    <div class="bg-green-50 border border-green-100 rounded-2xl p-4">
+
+                        <div class="flex items-start gap-3">
+
+                            <div
+                                class="w-9 h-9 rounded-xl bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+
+                                </svg>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm font-extrabold text-green-800">
+                                    Complaint completed
+                                </p>
+
+                                <p class="text-xs text-green-700 mt-1">
+                                    Your feedback helps us improve our services.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button id="viewComplaintFeedbackBtn" type="button"
+                            class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl text-sm font-bold transition">
+                            Leave Feedback
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================================================
+     FEEDBACK MODAL
+============================================================ -->
+
+    <div id="feedbackModal"
+        class="hidden fixed inset-0 z-[1000] modal-backdrop flex items-center justify-center p-3 sm:p-4" role="dialog"
+        aria-modal="true" aria-labelledby="feedbackModalTitle">
+
+        <div class="modal-panel bg-white w-full max-w-md overflow-hidden">
+
+
+            <!-- HEADER -->
+
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+
+                <div>
+
+                    <p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-600">
+                        Complaint Feedback
+                    </p>
+
+                    <h2 id="feedbackModalTitle" class="text-lg font-extrabold text-slate-900 mt-0.5">
+                        How was your experience?
+                    </h2>
+
+                </div>
+
+
+                <button id="closeFeedbackModal" type="button"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+                    aria-label="Close feedback">
+
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- BODY -->
+
+            <div class="p-5">
+
+
+                <!-- RATING -->
+
+                <div class="text-center">
+
+                    <p class="text-sm font-bold text-slate-700">
+                        Rate our service
+                    </p>
+
+
+                    <div id="feedbackStars" class="flex justify-center items-center gap-1 mt-3">
+
+                        <!-- STAR 1 -->
+
+                        <button type="button" class="feedbackStar text-slate-300 hover:text-yellow-400 transition"
+                            data-rating="1" aria-label="1 star">
+
+                            <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 20 20">
+
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <!-- STAR 2 -->
+
+                        <button type="button" class="feedbackStar text-slate-300 hover:text-yellow-400 transition"
+                            data-rating="2" aria-label="2 stars">
+
+                            <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 20 20">
+
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <!-- STAR 3 -->
+
+                        <button type="button" class="feedbackStar text-slate-300 hover:text-yellow-400 transition"
+                            data-rating="3" aria-label="3 stars">
+
+                            <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 20 20">
+
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <!-- STAR 4 -->
+
+                        <button type="button" class="feedbackStar text-slate-300 hover:text-yellow-400 transition"
+                            data-rating="4" aria-label="4 stars">
+
+                            <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 20 20">
+
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <!-- STAR 5 -->
+
+                        <button type="button" class="feedbackStar text-slate-300 hover:text-yellow-400 transition"
+                            data-rating="5" aria-label="5 stars">
+
+                            <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 20 20">
+
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.176 0l-2.802 2.036c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+
+                    <p id="feedbackRatingText" class="text-xs text-slate-400 mt-2">
+                        Select a rating
+                    </p>
+
+                </div>
+
+
+
+                <!-- COMMENT -->
+
+                <div class="mt-6">
+
+                    <label for="feedbackComment" class="block text-sm font-bold text-slate-700 mb-2">
+
+                        Comments
+
+                        <span class="font-normal text-slate-400">
+                            (optional)
+                        </span>
+
+                    </label>
+
+
+                    <textarea id="feedbackComment" rows="4" maxlength="1000"
+                        placeholder="Tell us about your experience..."
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"></textarea>
+
+
+                    <div class="flex justify-end mt-1">
+
+                        <span id="feedbackCharCount" class="text-xs text-slate-400">
+                            0 / 1000
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <p id="feedbackMessage" class="hidden text-sm mt-3"></p>
+
+
+
+                <!-- SUBMIT -->
+
+                <button id="submitFeedbackBtn" type="button"
+                    class="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl text-sm font-bold transition shadow-lg shadow-blue-600/15">
+                    Submit Feedback
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================================================
+     GOOGLE MAPS
+============================================================ -->
+
+    <!--
+    Keep your Google Maps key here if you are using the map.
+    The complaint modal itself should NOT depend on Maps being loaded.
+-->
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_ACTUAL_GOOGLE_MAPS_API_KEY&loading=async"></script>
+
+
+
+    <!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+
+    <script src="myComplaints.js"></script>
+
+
+    <!-- ============================================================
+     MODAL SAFETY / UI HELPERS
+============================================================ -->
+
+    <script>
+
+        /*
+         * These listeners are intentionally kept in the HTML so the
+         * modal can still close correctly even if a map-related
+         * JavaScript error happens elsewhere.
+         */
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const complaintModal =
+                document.getElementById("complaintViewModal");
+
+            const feedbackModal =
+                document.getElementById("feedbackModal");
+
+            const closeComplaintButton =
+                document.getElementById("closeComplaintModal");
+
+            const closeFeedbackButton =
+                document.getElementById("closeFeedbackModal");
+
+
+            /* --------------------------------------------------------
+               CLOSE COMPLAINT MODAL
+            -------------------------------------------------------- */
+
+            if (closeComplaintButton) {
+
+                closeComplaintButton.addEventListener(
+                    "click",
+                    function () {
+
+                        if (complaintModal) {
+                            complaintModal.classList.add("hidden");
+                            complaintModal.classList.remove("flex");
+                        }
+
+                        document.body.classList.remove("modal-open");
+
+                    }
+                );
+
+            }
+
+
+            /* --------------------------------------------------------
+               CLOSE FEEDBACK MODAL
+            -------------------------------------------------------- */
+
+            if (closeFeedbackButton) {
+
+                closeFeedbackButton.addEventListener(
+                    "click",
+                    function () {
+
+                        if (feedbackModal) {
+                            feedbackModal.classList.add("hidden");
+                            feedbackModal.classList.remove("flex");
+                        }
+
+                        document.body.classList.remove("modal-open");
+
+                    }
+                );
+
+            }
+
+
+            /* --------------------------------------------------------
+               CLOSE WHEN CLICKING BACKDROP
+            -------------------------------------------------------- */
+
+            if (complaintModal) {
+
+                complaintModal.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (event.target === complaintModal) {
+
+                            complaintModal.classList.add("hidden");
+                            complaintModal.classList.remove("flex");
+
+                            document.body.classList.remove("modal-open");
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            if (feedbackModal) {
+
+                feedbackModal.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (event.target === feedbackModal) {
+
+                            feedbackModal.classList.add("hidden");
+                            feedbackModal.classList.remove("flex");
+
+                            document.body.classList.remove("modal-open");
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            /* --------------------------------------------------------
+               ESCAPE KEY
+            -------------------------------------------------------- */
+
+            document.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (event.key !== "Escape") {
+                        return;
+                    }
+
+
+                    if (
+                        complaintModal &&
+                        !complaintModal.classList.contains("hidden")
+                    ) {
+
+                        complaintModal.classList.add("hidden");
+                        complaintModal.classList.remove("flex");
+
+                    }
+
+
+                    if (
+                        feedbackModal &&
+                        !feedbackModal.classList.contains("hidden")
+                    ) {
+
+                        feedbackModal.classList.add("hidden");
+                        feedbackModal.classList.remove("flex");
+
+                    }
+
+
+                    document.body.classList.remove("modal-open");
+
+                }
+            );
+
+
+            /* --------------------------------------------------------
+               FEEDBACK CHARACTER COUNTER
+            -------------------------------------------------------- */
+
+            const feedbackComment =
+                document.getElementById("feedbackComment");
+
+            const feedbackCharCount =
+                document.getElementById("feedbackCharCount");
+
+
+            if (
+                feedbackComment &&
+                feedbackCharCount
+            ) {
+
+                feedbackComment.addEventListener(
+                    "input",
+                    function () {
+
+                        feedbackCharCount.textContent =
+                            `${this.value.length} / 1000`;
+
+                    }
+                );
+
+            }
+
+
+            /* --------------------------------------------------------
+               GOOGLE MAP ERROR SAFETY
+            -------------------------------------------------------- */
+
+            window.addEventListener(
+                "error",
+                function (event) {
+
+                    const message =
+                        event?.message || "";
+
+                    if (
+                        message.toLowerCase().includes("google") ||
+                        message.toLowerCase().includes("maps")
+                    ) {
+
+                        console.warn(
+                            "Google Maps error detected. Complaint modal will continue without the map."
+                        );
+
+                    }
+
+                }
+            );
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>
